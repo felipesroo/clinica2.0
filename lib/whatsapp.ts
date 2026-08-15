@@ -10,12 +10,14 @@ async function getRealChatId(phone: string, baseUrl: string, session: string): P
     cleaned = '55' + cleaned;
   }
   
+  const apiKey = process.env.WAHA_API_KEY || 'admin';
+
   try {
     const response = await fetch(`${baseUrl}/api/contacts/check-exists?phone=${cleaned}&session=${session}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'X-Api-Key': 'aura123'
+        'X-Api-Key': apiKey
       }
     });
     
@@ -47,6 +49,7 @@ export async function sendWhatsAppMessage(phone: string, text: string): Promise<
     // Normalize WAHA URL (remove trailing slash)
     const baseUrl = settings.wahaUrl.trim().replace(/\/$/, '');
     const session = settings.wahaSessionName.trim();
+    const apiKey = process.env.WAHA_API_KEY || 'admin';
     
     const chatId = await getRealChatId(phone, baseUrl, session);
     
@@ -55,7 +58,7 @@ export async function sendWhatsAppMessage(phone: string, text: string): Promise<
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-Api-Key': 'aura123'
+        'X-Api-Key': apiKey
       },
       body: JSON.stringify({
         chatId: chatId,

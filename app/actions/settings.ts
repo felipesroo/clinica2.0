@@ -42,7 +42,7 @@ export async function getSettings(): Promise<ClinicSettings> {
         id: "1",
         nomeFantasia: "Clínica da Dra. Jordane Ferreira Faria",
         razaoSocial: "Dra. Jordane Ferreira Faria Estética Avançada",
-        wahaUrl: "http://waha:3000",
+        wahaUrl: "http://2.25.152.195:3005",
         wahaSessionName: "default",
       }
     });
