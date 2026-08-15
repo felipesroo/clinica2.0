@@ -81,14 +81,14 @@ export async function processMessageWithAI(phone: string, text: string): Promise
     if (message.tool_calls && message.tool_calls.length > 0) {
       history.push(message); // add assistant message with tool_calls
       
-      for (const toolCall of message.tool_calls) {
+      for (const toolCall of message.tool_calls as any[]) {
         let contentToPush = "";
         try {
-          const args = JSON.parse(toolCall.function.arguments || "{}");
-          if (toolCall.function.name === "get_available_slots") {
+          const args = JSON.parse(toolCall.function?.arguments || "{}");
+          if (toolCall.function?.name === "get_available_slots") {
             const slots = await getAvailableSlots(args.date);
             contentToPush = JSON.stringify(slots);
-          } else if (toolCall.function.name === "book_appointment") {
+          } else if (toolCall.function?.name === "book_appointment") {
             const result = await bookAppointment(args, phone);
             contentToPush = JSON.stringify(result);
           } else {
@@ -158,7 +158,6 @@ async function bookAppointment(args: any, phone: string) {
         data: {
           nome: args.patientName,
           telefone: phone,
-          historico: "Cadastrado via Assistente Virtual (WAHA)"
         }
       });
     }

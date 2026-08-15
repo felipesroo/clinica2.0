@@ -44,16 +44,17 @@ export async function getAppointments() {
     const timeMaxDate = new Date(timeMax).toISOString().split('T')[0];
     const remoteGoogleIds = new Set(googleEvents.map((e: any) => e.googleEventId || e.id).filter(Boolean));
     
+    const deletedIds = new Set<string>();
     for (const local of localAppointments) {
       if (local.googleEventId && local.date >= timeMinDate && local.date <= timeMaxDate) {
         if (!remoteGoogleIds.has(local.googleEventId)) {
           await prisma.agendamento.delete({ where: { id: local.id } });
-          local._deleted = true;
+          deletedIds.add(local.id);
         }
       }
     }
     
-    const validLocalAppointments = localAppointments.filter((a: any) => !a._deleted);
+    const validLocalAppointments = localAppointments.filter((a: any) => !deletedIds.has(a.id));
 
     const newAgendamentos = [];
 
@@ -96,7 +97,7 @@ export async function getAppointments() {
             duration: duration || 60,
             service: service,
             clienteId: cliente.id,
-            googleEventId: e.googleEventId || e.id,
+            googleEventId: (e as any).googleEventId || (e as any).id,
           },
           include: { cliente: true }
         });
