@@ -38,7 +38,13 @@ export async function getSettings(): Promise<ClinicSettings> {
 
   if (!settings) {
     settings = await prisma.configuracao.create({
-      data: { id: "1" }
+      data: {
+        id: "1",
+        nomeFantasia: "Clínica da Dra. Jordane Ferreira Faria",
+        razaoSocial: "Dra. Jordane Ferreira Faria Estética Avançada",
+        wahaUrl: "http://waha:3000",
+        wahaSessionName: "default",
+      }
     });
   }
 
