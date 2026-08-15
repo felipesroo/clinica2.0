@@ -3,7 +3,7 @@ import { prisma } from '../../../lib/prisma';
 
 export async function GET() {
   try {
-    // 0. Native SQL: Create all PostgreSQL schema tables if missing
+    // 0. Native SQL: Create all PostgreSQL schema tables if missing matching schema.prisma
     await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "Cliente" (
           "id" TEXT NOT NULL,
@@ -40,7 +40,7 @@ export async function GET() {
           "nome" TEXT NOT NULL,
           "duracao" INTEGER NOT NULL DEFAULT 60,
           "preco" DOUBLE PRECISION NOT NULL DEFAULT 0,
-          "criadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "cor" TEXT NOT NULL DEFAULT 'bg-primary',
           CONSTRAINT "Procedimento_pkey" PRIMARY KEY ("id")
       );
 
@@ -50,7 +50,6 @@ export async function GET() {
           "categoria" TEXT NOT NULL DEFAULT 'Geral',
           "quantidade" INTEGER NOT NULL DEFAULT 0,
           "unidade" TEXT NOT NULL DEFAULT 'un.',
-          "minimo" INTEGER NOT NULL DEFAULT 5,
           "status" TEXT NOT NULL DEFAULT 'Em Estoque',
           "criadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "atualizadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -69,6 +68,26 @@ export async function GET() {
           CONSTRAINT "EstoqueMovimentacao_agendamentoId_fkey" FOREIGN KEY ("agendamentoId") REFERENCES "Agendamento"("id") ON DELETE SET NULL ON UPDATE CASCADE
       );
 
+      CREATE TABLE IF NOT EXISTS "ClienteFoto" (
+          "id" TEXT NOT NULL,
+          "clienteId" TEXT NOT NULL,
+          "url" TEXT NOT NULL,
+          "tipo" TEXT NOT NULL DEFAULT 'Antes',
+          "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          CONSTRAINT "ClienteFoto_pkey" PRIMARY KEY ("id"),
+          CONSTRAINT "ClienteFoto_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE CASCADE ON UPDATE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS "ClienteProntuario" (
+          "id" TEXT NOT NULL,
+          "clienteId" TEXT NOT NULL,
+          "titulo" TEXT NOT NULL,
+          "texto" TEXT NOT NULL,
+          "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          CONSTRAINT "ClienteProntuario_pkey" PRIMARY KEY ("id"),
+          CONSTRAINT "ClienteProntuario_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE CASCADE ON UPDATE CASCADE
+      );
+
       CREATE TABLE IF NOT EXISTS "Configuracao" (
           "id" TEXT NOT NULL DEFAULT '1',
           "nomeFantasia" TEXT NOT NULL DEFAULT 'Clínica da Dra. Jordane Ferreira Faria',
@@ -79,7 +98,7 @@ export async function GET() {
           "whatsapp" TEXT NOT NULL DEFAULT '(62) 99443-7642',
           "cep" TEXT NOT NULL DEFAULT '01415-000',
           "endereco" TEXT NOT NULL DEFAULT 'Rua Principal, 1000',
-          "logoUrl" TEXT NOT NULL DEFAULT '',
+          "logoUrl" TEXT NOT NULL DEFAULT 'https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA',
           "bairro" TEXT NOT NULL DEFAULT 'Centro',
           "cidade" TEXT NOT NULL DEFAULT 'Goiânia',
           "estado" TEXT NOT NULL DEFAULT 'GO',
@@ -96,12 +115,15 @@ export async function GET() {
           "msgLembrete2hAtiva" BOOLEAN NOT NULL DEFAULT true,
           "msgLembrete2hTexto" TEXT NOT NULL DEFAULT 'Oi, {nome}! Tudo bem? Passando para te lembrar que daqui a pouquinho, às {hora}, você tem o procedimento de {servico}, estou te aguardando!😊',
           "openAiApiKey" TEXT,
-          "openAiSystemPrompt" TEXT,
+          "openAiSystemPrompt" TEXT DEFAULT 'Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.',
           "aiAgentActive" BOOLEAN NOT NULL DEFAULT false,
           "aiAutoSchedule" BOOLEAN NOT NULL DEFAULT false,
           CONSTRAINT "Configuracao_pkey" PRIMARY KEY ("id")
       );
     `);
+
+    // Ensure missing column 'cor' exists if table was created in partial step
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Procedimento" ADD COLUMN IF NOT EXISTS "cor" TEXT NOT NULL DEFAULT 'bg-primary';`);
 
     // 1. Seed or Update Configuracao (Clinic Profile & WAHA)
     const config = await prisma.configuracao.upsert({
@@ -129,13 +151,13 @@ export async function GET() {
 
     // 2. Seed Procedimentos
     const defaultProcedures = [
-      { id: 'p1', nome: 'Capilar', duracao: 60, preco: 350 },
-      { id: 'p2', nome: 'Botox', duracao: 45, preco: 950 },
-      { id: 'p3', nome: 'Preenchimento', duracao: 60, preco: 1200 },
-      { id: 'p4', nome: 'Limpeza de Pele', duracao: 60, preco: 250 },
-      { id: 'p5', nome: 'PDRN', duracao: 45, preco: 800 },
-      { id: 'p6', nome: 'Microagulhamento', duracao: 60, preco: 450 },
-      { id: 'p7', nome: 'Aplicação de Vitaminas', duracao: 30, preco: 300 },
+      { id: 'p1', nome: 'Capilar', duracao: 60, preco: 350, cor: 'bg-primary' },
+      { id: 'p2', nome: 'Botox', duracao: 45, preco: 950, cor: 'bg-primary' },
+      { id: 'p3', nome: 'Preenchimento', duracao: 60, preco: 1200, cor: 'bg-primary' },
+      { id: 'p4', nome: 'Limpeza de Pele', duracao: 60, preco: 250, cor: 'bg-primary' },
+      { id: 'p5', nome: 'PDRN', duracao: 45, preco: 800, cor: 'bg-primary' },
+      { id: 'p6', nome: 'Microagulhamento', duracao: 60, preco: 450, cor: 'bg-primary' },
+      { id: 'p7', nome: 'Aplicação de Vitaminas', duracao: 30, preco: 300, cor: 'bg-primary' },
     ];
 
     for (const proc of defaultProcedures) {
@@ -159,7 +181,7 @@ export async function GET() {
       }
     }
 
-    // 4. Seed Main Patients
+    // 4. Seed Patients
     const mainPatients = [
       { id: 'c1', nome: 'FELIPE SOARES RIBEIRO DE OLIVEIRA', telefone: '62994437642' },
       { id: 'c2', nome: 'Dra. Jordane Faria', telefone: '556281863740' },
