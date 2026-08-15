@@ -3,9 +3,9 @@ import { prisma } from '../../../lib/prisma';
 
 export async function GET() {
   try {
-    // 0. Native SQL: Create all PostgreSQL schema tables if missing matching schema.prisma
-    await prisma.$executeRawUnsafe(`
-      CREATE TABLE IF NOT EXISTS "Cliente" (
+    // Execute DDL statements individually to ensure full execution in PostgreSQL
+    const ddlStatements = [
+      `CREATE TABLE IF NOT EXISTS "Cliente" (
           "id" TEXT NOT NULL,
           "nome" TEXT NOT NULL,
           "email" TEXT,
@@ -17,9 +17,8 @@ export async function GET() {
           "objetivoPrincipal" TEXT,
           "tipoPele" TEXT,
           CONSTRAINT "Cliente_pkey" PRIMARY KEY ("id")
-      );
-
-      CREATE TABLE IF NOT EXISTS "Agendamento" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "Agendamento" (
           "id" TEXT NOT NULL,
           "date" TEXT NOT NULL,
           "startTime" TEXT NOT NULL,
@@ -33,18 +32,17 @@ export async function GET() {
           "clienteId" TEXT NOT NULL,
           CONSTRAINT "Agendamento_pkey" PRIMARY KEY ("id"),
           CONSTRAINT "Agendamento_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE CASCADE ON UPDATE CASCADE
-      );
-
-      CREATE TABLE IF NOT EXISTS "Procedimento" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "Procedimento" (
           "id" TEXT NOT NULL,
           "nome" TEXT NOT NULL,
           "duracao" INTEGER NOT NULL DEFAULT 60,
           "preco" DOUBLE PRECISION NOT NULL DEFAULT 0,
           "cor" TEXT NOT NULL DEFAULT 'bg-primary',
           CONSTRAINT "Procedimento_pkey" PRIMARY KEY ("id")
-      );
-
-      CREATE TABLE IF NOT EXISTS "EstoqueProduto" (
+      );`,
+      `ALTER TABLE "Procedimento" ADD COLUMN IF NOT EXISTS "cor" TEXT NOT NULL DEFAULT 'bg-primary';`,
+      `CREATE TABLE IF NOT EXISTS "EstoqueProduto" (
           "id" TEXT NOT NULL,
           "nome" TEXT NOT NULL,
           "categoria" TEXT NOT NULL DEFAULT 'Geral',
@@ -54,9 +52,8 @@ export async function GET() {
           "criadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "atualizadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           CONSTRAINT "EstoqueProduto_pkey" PRIMARY KEY ("id")
-      );
-
-      CREATE TABLE IF NOT EXISTS "EstoqueMovimentacao" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "EstoqueMovimentacao" (
           "id" TEXT NOT NULL,
           "produtoId" TEXT NOT NULL,
           "agendamentoId" TEXT,
@@ -66,9 +63,8 @@ export async function GET() {
           CONSTRAINT "EstoqueMovimentacao_pkey" PRIMARY KEY ("id"),
           CONSTRAINT "EstoqueMovimentacao_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "EstoqueProduto"("id") ON DELETE CASCADE ON UPDATE CASCADE,
           CONSTRAINT "EstoqueMovimentacao_agendamentoId_fkey" FOREIGN KEY ("agendamentoId") REFERENCES "Agendamento"("id") ON DELETE SET NULL ON UPDATE CASCADE
-      );
-
-      CREATE TABLE IF NOT EXISTS "ClienteFoto" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "ClienteFoto" (
           "id" TEXT NOT NULL,
           "clienteId" TEXT NOT NULL,
           "url" TEXT NOT NULL,
@@ -76,9 +72,8 @@ export async function GET() {
           "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           CONSTRAINT "ClienteFoto_pkey" PRIMARY KEY ("id"),
           CONSTRAINT "ClienteFoto_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE CASCADE ON UPDATE CASCADE
-      );
-
-      CREATE TABLE IF NOT EXISTS "ClienteProntuario" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "ClienteProntuario" (
           "id" TEXT NOT NULL,
           "clienteId" TEXT NOT NULL,
           "titulo" TEXT NOT NULL,
@@ -86,9 +81,8 @@ export async function GET() {
           "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           CONSTRAINT "ClienteProntuario_pkey" PRIMARY KEY ("id"),
           CONSTRAINT "ClienteProntuario_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE CASCADE ON UPDATE CASCADE
-      );
-
-      CREATE TABLE IF NOT EXISTS "Configuracao" (
+      );`,
+      `CREATE TABLE IF NOT EXISTS "Configuracao" (
           "id" TEXT NOT NULL DEFAULT '1',
           "nomeFantasia" TEXT NOT NULL DEFAULT 'Clínica da Dra. Jordane Ferreira Faria',
           "razaoSocial" TEXT NOT NULL DEFAULT 'Dra. Jordane Ferreira Faria Estética Avançada',
@@ -119,11 +113,16 @@ export async function GET() {
           "aiAgentActive" BOOLEAN NOT NULL DEFAULT false,
           "aiAutoSchedule" BOOLEAN NOT NULL DEFAULT false,
           CONSTRAINT "Configuracao_pkey" PRIMARY KEY ("id")
-      );
-    `);
+      );`
+    ];
 
-    // Ensure missing column 'cor' exists if table was created in partial step
-    await prisma.$executeRawUnsafe(`ALTER TABLE "Procedimento" ADD COLUMN IF NOT EXISTS "cor" TEXT NOT NULL DEFAULT 'bg-primary';`);
+    for (const sql of ddlStatements) {
+      try {
+        await prisma.$executeRawUnsafe(sql);
+      } catch (ddlErr: any) {
+        console.error("DDL Exec error:", ddlErr?.message);
+      }
+    }
 
     // 1. Seed or Update Configuracao (Clinic Profile & WAHA)
     const config = await prisma.configuracao.upsert({
