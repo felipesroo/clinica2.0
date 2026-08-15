@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
+import { execSync } from 'child_process';
 
 export async function GET() {
   try {
+    // 0. Ensure PostgreSQL schema tables exist
+    try {
+      execSync('npx prisma db push --schema=./prisma/schema.prisma --accept-data-loss', { stdio: 'pipe' });
+    } catch (pushErr: any) {
+      console.error("DB push error in seed route:", pushErr?.message);
+    }
+
     // 1. Seed or Update Configuracao (Clinic Profile & WAHA)
     const config = await prisma.configuracao.upsert({
       where: { id: "1" },
