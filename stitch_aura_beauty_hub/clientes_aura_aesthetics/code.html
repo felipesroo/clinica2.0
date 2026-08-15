@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Aesthetics - Client Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#f5ddd7",
+                        "tertiary": "#4c6455",
+                        "tertiary-fixed": "#cee9d6",
+                        "on-background": "#1a1c1a",
+                        "surface-dim": "#dbdad7",
+                        "surface-bright": "#faf9f6",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f2f1ee",
+                        "primary": "#6c5a56",
+                        "on-secondary-container": "#745c00",
+                        "surface-tint": "#6c5a56",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "surface-container": "#efeeeb",
+                        "on-tertiary-fixed": "#082014",
+                        "on-surface-variant": "#4f4542",
+                        "tertiary-container": "#cde8d5",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container-low": "#f4f3f1",
+                        "surface": "#faf9f6",
+                        "secondary": "#735c00",
+                        "outline-variant": "#d2c3c0",
+                        "on-surface": "#1a1c1a",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#f4dcd6",
+                        "on-primary-fixed-variant": "#53433f",
+                        "on-primary-container": "#71605b",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#241a00",
+                        "on-tertiary-container": "#51695a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "inverse-primary": "#d8c2bc",
+                        "surface-variant": "#e3e2e0",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "on-primary-fixed": "#251915",
+                        "on-secondary-fixed-variant": "#574500",
+                        "secondary-container": "#fed65b",
+                        "outline": "#807471",
+                        "background": "#faf9f6",
+                        "inverse-surface": "#2f312f",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "caption": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 30px -10px rgba(244, 220, 214, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md">
+<!-- TopAppBar -->
+<header class="hidden md:flex flex justify-between items-center h-20 px-margin-desktop ml-64 w-[calc(100%-16rem)] bg-surface/40 dark:bg-surface-dim/40 text-primary dark:text-primary-fixed-dim font-headline-md text-headline-md docked full-width top-0 backdrop-blur-md border-b border-white/50 shadow-sm shadow-primary/10 fixed z-50">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-primary">Aura Aesthetics</span>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest/50 border-0 border-b border-outline-variant/30 focus:border-tertiary focus:ring-0 pl-10 pr-4 py-2 font-body-md text-body-md rounded-none placeholder:text-on-surface-variant/50" placeholder="Search clients..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/50 shadow-sm">
+<img alt="Practitioner Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a female aesthetics practitioner in a bright, modern clinical setting. Soft, natural lighting. Warm, trusting expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOgJF2pkBvC5m0yWqIU-ErQ_rOWB9L_laQlNjybRceLS4RnoNVfkX9rwMoEBFM2akg-Yuop0FC-fEjwdy5B75EkYVQEPqtvFpHK0Rggp80cZAp82tfM5JB7NszSwp-2SGemFQRXUTQhJ-imX6X5aWkulBypTKmCvMlB-slMyQdRzZkreTuYXxEQ0WBCClATvwaGAgtYNQoizUBqK5RTYLp9zemiTZFEW86MgyEAqU_Dwy9Ja9wnUNeIg"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-lowest text-primary dark:text-primary-fixed-dim font-body-md text-body-md bg-surface-container-low/40 backdrop-blur-xl border-r border-white/50 flat no shadows z-50 flex flex-col h-full py-margin-desktop px-4">
+<div class="mb-12 px-4 text-center">
+<div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-white/80 shadow-sm">
+<img alt="Clinic Logo" class="w-full h-full object-cover" data-alt="A minimalist, abstract logo for a premium aesthetics clinic featuring soft gold and sage green hues on a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVISkPuY6tS_U70eMeFO2FiSmVKVfGIJJSm3ZcZLYOTX5bm629fOn4YM9iylP4YTbySNIYYXpq0nE3kmrQFPNf0kZA2c4QlMz7euFxeCBgjPYZvZr4CIL4OS1xkmrUpdHwS99mRGF3ITFTH6y5o2alZWYG0rhGfKSL88Gjj9FZZWH9i2RBwApK3E3Wn9fdACTo3mgNdOodop4ZWaYyR5c9m7cj8-xn-JSeOK6KlJknqBuLPSxbwka58A"/>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Aura Aesthetics</h2>
+<p class="font-caption text-caption text-on-surface-variant">Management Suite</p>
+</div>
+<ul class="flex flex-col gap-2 flex-1">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant font-medium hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant font-medium hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Appointments
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-bold bg-primary-container/50 hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                    Clients
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant font-medium hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant font-medium hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+                    Reports
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant font-medium hover:bg-primary-fixed/20 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto pt-8">
+<button class="w-full bg-gradient-to-r from-primary-fixed to-secondary-fixed text-on-primary-fixed font-label-md text-label-md py-3 rounded-lg soft-shadow hover:-translate-y-0.5 transition-transform">
+                Book New Patient
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 md:pt-28 px-margin-mobile md:px-margin-desktop pb-24 md:pb-12 min-h-screen">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Client Directory</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and review patient profiles.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest glass-panel rounded-lg text-primary font-label-md text-label-md hover:bg-primary-fixed/10 transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+                    Filter
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout for Client Management -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Client List (Left/Main Span) -->
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-4">
+<!-- Search/Filter Bar inside Content -->
+<div class="glass-panel rounded-xl p-4 flex flex-col sm:flex-row gap-4 items-center justify-between mb-4">
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest/50 border-0 border-b border-outline-variant/30 focus:border-tertiary focus:ring-0 pl-10 pr-4 py-2 font-body-md text-body-md rounded-none placeholder:text-on-surface-variant/50" placeholder="Search name or ID..." type="text"/>
+</div>
+<div class="flex gap-2 w-full sm:w-auto">
+<span class="px-3 py-1 bg-tertiary-container/50 text-on-tertiary-container rounded-full font-caption text-caption whitespace-nowrap">VIP Clients</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-caption text-caption whitespace-nowrap">Recent</span>
+</div>
+</div>
+<!-- Client List Items -->
+<div class="flex flex-col gap-3">
+<!-- Selected Client Item -->
+<div class="glass-panel rounded-xl p-4 flex items-center justify-between cursor-pointer border-l-4 border-l-primary bg-primary-fixed/10 transition-all">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high border border-white/50 flex-shrink-0">
+<img alt="Eleanor Vance" class="w-full h-full object-cover" data-alt="A portrait of a serene woman in her late 30s with flawless skin, reflecting a high-end aesthetics aesthetic. Soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAygr1VE1A5V1FsHpOV3sL6v7TVjuSyGwnen3I-vy5w-Oaq7gZgiOZn73oDcmlTUgdm6wVwuFzJOELEqpSEsDm34vGAYbCqSonTUIjAU4ahiq4AyGb6lEDpZqwiOHO6fveEaMPIoVRmpWpffx6GObaZi8cKMUpraSlAzMu2LYjbVi5hl-FI3bRiC-XXaGy9k8Z00y--TmjQX2TrSleJ0IZSWCge5zCctg4drLi3s6ql5V5dm3v4oFEGCw"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary text-lg">Eleanor Vance</h3>
+<p class="font-caption text-caption text-on-surface-variant">ID: AA-8492 • +1 (555) 019-8234</p>
+</div>
+</div>
+<div class="hidden sm:block text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Last: Oct 12 (Botox)</p>
+<p class="font-caption text-caption text-tertiary font-medium">Next: Nov 28 (Follow-up)</p>
+</div>
+<span class="material-symbols-outlined text-primary ml-4">chevron_right</span>
+</div>
+<!-- Client Item -->
+<div class="glass-panel rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-low/50 transition-all border-l-4 border-l-transparent">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high border border-white/50 flex-shrink-0 flex items-center justify-center text-primary font-headline-md text-lg">
+                                SC
+                            </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary text-lg">Sophia Chen</h3>
+<p class="font-caption text-caption text-on-surface-variant">ID: AA-9102 • +1 (555) 012-4411</p>
+</div>
+</div>
+<div class="hidden sm:block text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Last: Nov 01 (Filler)</p>
+<p class="font-caption text-caption text-on-surface-variant/70">No upcoming</p>
+</div>
+</div>
+<!-- Client Item -->
+<div class="glass-panel rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-low/50 transition-all border-l-4 border-l-transparent">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high border border-white/50 flex-shrink-0">
+<img alt="Marcus Thorne" class="w-full h-full object-cover" data-alt="A mature, sophisticated man looking directly at the camera. Minimalist aesthetics clinic lighting, emphasizing subtle facial structure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWC8ku9JO10eSa54BMZXJsE0mbTSxVyUcAV_mhOMv1mYxCg5vZCLzC9pQykNFUD9_yZVpVATdcF_JcssFPnP4KoLiehRX8xHGwDPifgJkuD8bKxZ51YxcWI1yvRU-MjIXRF18PYsc_d5kvyZf8WrQGUp4g4U3mAW7Eit-ghScY_mJYg2wC43z0H6D8EwGzy-6ZMdQ84IF5HBpnUQOlb4Td_w25gh95sCL5LQ1sx48XG9rUGgE3LFgp1g"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary text-lg">Marcus Thorne</h3>
+<p class="font-caption text-caption text-on-surface-variant">ID: AA-7731 • +1 (555) 018-9922</p>
+</div>
+</div>
+<div class="hidden sm:block text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Last: Sep 15 (Laser)</p>
+<p class="font-caption text-caption text-tertiary font-medium">Next: Dec 05 (Laser Session 2)</p>
+</div>
+</div>
+</div>
+<div class="flex justify-center mt-4">
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1">
+                        Load More Clients <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Client Detail Preview (Right Sidebar Span) -->
+<div class="lg:col-span-5 xl:col-span-4 hidden lg:block">
+<div class="glass-panel rounded-2xl p-6 soft-shadow sticky top-28">
+<!-- Detail Header -->
+<div class="flex flex-col items-center text-center mb-6">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary-fixed mb-4 relative">
+<img alt="Eleanor Vance" class="w-full h-full object-cover" data-alt="A portrait of a serene woman in her late 30s with flawless skin, reflecting a high-end aesthetics aesthetic. Soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpQNHJFQ_2cRcO0bcq1K6k5Hx-SqjuVzTdHnDgnh8DUg0xmoE0JjH8eRgB1Nr8kKh8hw2tMh-PAA3mC2qOxNIvFMmGkc4qpXaIUmJ26hKzgc6Vy9wH8gorqYXUO_IKKQVvb4ymK9lA9s_3cHDM9pCmQk4ZMuNQ5cNYvQU_0PFQgH6-xCMT_Pr5vrDT8iZqV3g0FWl6HZInxjWdNxDWQsFAcIw6VewklCUTA6oLdc33z2kXPLriBiatQQ"/>
+<div class="absolute bottom-0 right-0 w-6 h-6 bg-tertiary rounded-full border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Eleanor Vance</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">VIP Member since 2021</p>
+<div class="flex gap-3 mt-4">
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary-fixed/20 transition-colors">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary-fixed/20 transition-colors">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors">
+                                View Full Profile
+                            </button>
+</div>
+</div>
+<!-- Quick Stats -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest/50 rounded-xl p-3 text-center border border-white/50">
+<p class="font-caption text-caption text-on-surface-variant mb-1">Total Visits</p>
+<p class="font-headline-md text-headline-md text-primary font-bold">14</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-3 text-center border border-white/50">
+<p class="font-caption text-caption text-on-surface-variant mb-1">Lifetime Value</p>
+<p class="font-headline-md text-headline-md text-primary font-bold">$4.2k</p>
+</div>
+</div>
+<!-- Treatment History Snippet -->
+<div class="mb-6">
+<h4 class="font-label-md text-label-md text-primary font-semibold mb-3 border-b border-outline-variant/30 pb-1">Recent Treatments</h4>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<p class="font-body-md text-body-md text-on-background">Neuromodulators (Botox)</p>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">Oct 12, 2023</p>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary-container"></div>
+<p class="font-body-md text-body-md text-on-background">Dermal Fillers (Lips)</p>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">Jul 05, 2023</p>
+</div>
+</div>
+</div>
+<!-- Photo Preview -->
+<div>
+<h4 class="font-label-md text-label-md text-primary font-semibold mb-3 border-b border-outline-variant/30 pb-1">Progress Photos</h4>
+<div class="grid grid-cols-3 gap-2">
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container-high border border-white/50 relative group cursor-pointer">
+<img alt="Before Botox" class="w-full h-full object-cover" data-alt="A close-up clinical photo of a patient's forehead before aesthetic treatment. Even lighting, neutral expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtiOrt1iJKtzI4MvL0WYyAOulsuODtBgjuNFBOmtxpsEbqWZKKt8FRoUklySMMreClh1h_BMB2abVxEdYIuahJz_v3s0ohklSXpl7znWWBASsWBzB85NgquVAAp0EocLeTQaXqNgnAURyS4rshdUUYQNQB3Pukd-LeVoy8n_-r2j16OoNjnE3qE10k--qlz-QSIMm9E5i4CwBCEU1LOt8BnFl-eBAHkwux_7AW_oO8yvpn2l9u0-4EZw"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container-high border border-white/50 relative group cursor-pointer">
+<img alt="After Botox" class="w-full h-full object-cover" data-alt="A close-up clinical photo of a patient's forehead after aesthetic treatment, showing smoother skin. Even lighting, neutral expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiAfo5RB91SNpgfgF2BcvpJlUqFFrWacqioIMZnf6diKBWFfAyuZ3iCwJMqwUpR0wMgEVc85ziLlMSjZ6Qucozx15nzEEIqeXo-L18WmT3XFb3VfII4MhTwBQUcRHvaIb7ZIC_5lRu1c-LgMAmKxX3ZvYX749V86A9SRhk8tScQmAshIb8Bjztk5p2XS18cFxUWJGTDsEzPGOYkiE9X-Ri6WVtNQlzeZxNzYl7XuK_hpkbZMJ7X0_DDg"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-lowest/50 border border-dashed border-outline-variant flex flex-col items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1">add_a_photo</span>
+<span class="font-caption text-caption text-[10px]">Add New</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low/90 backdrop-blur-md border-t border-white/50 shadow-[0_-4px_20px_rgba(108,90,86,0.1)] z-50 px-4 py-2 flex justify-between items-center pb-safe">
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-caption text-[10px]">Dash</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-caption text-[10px]">Schedule</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#">
+<div class="bg-primary-container/50 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<span class="font-caption text-[10px] font-bold">Clients</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-caption text-[10px]">Inv</span>
+</a>
+</nav>
+</body></html>

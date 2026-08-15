@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Aesthetics - Relatórios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#1a1c1a",
+                      "surface-container": "#efeeeb",
+                      "secondary-fixed-dim": "#e9c349",
+                      "inverse-surface": "#2f312f",
+                      "primary-fixed-dim": "#d8c2bc",
+                      "surface-bright": "#faf9f6",
+                      "surface": "#faf9f6",
+                      "tertiary": "#4c6455",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1a1c1a",
+                      "secondary-fixed": "#ffe088",
+                      "surface-tint": "#6c5a56",
+                      "on-primary-fixed-variant": "#53433f",
+                      "inverse-primary": "#d8c2bc",
+                      "on-secondary-container": "#745c00",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed-variant": "#574500",
+                      "on-tertiary-fixed": "#082014",
+                      "secondary-container": "#fed65b",
+                      "surface-container-highest": "#e3e2e0",
+                      "on-tertiary-container": "#51695a",
+                      "surface-container-low": "#f4f3f1",
+                      "surface-variant": "#e3e2e0",
+                      "on-error": "#ffffff",
+                      "outline": "#807471",
+                      "on-surface-variant": "#4f4542",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f2f1ee",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#cde8d5",
+                      "on-primary-container": "#71605b",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#d2c3c0",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#b2cdbb",
+                      "background": "#faf9f6",
+                      "primary-container": "#f4dcd6",
+                      "on-primary-fixed": "#251915",
+                      "surface-container-high": "#e9e8e5",
+                      "primary": "#6c5a56",
+                      "surface-dim": "#dbdad7",
+                      "tertiary-fixed": "#cee9d6",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#f5ddd7",
+                      "on-secondary-fixed": "#241a00",
+                      "secondary": "#735c00",
+                      "on-tertiary-fixed-variant": "#344c3e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "unit": "8px",
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "caption": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(244, 220, 214, 0.3), 0 2px 4px -1px rgba(244, 220, 214, 0.3);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-surface-container-low/40 backdrop-blur-xl border-r border-white/50 z-20 flex-col h-full py-margin-desktop px-4">
+<div class="mb-12 text-center">
+<div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-white">
+<img alt="Clinic Logo" class="w-full h-full object-cover" data-alt="A sophisticated clinic logo with gold foil accents on a pale ivory background, embodying a premium wellness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZB9qLFgFhvptM1eh9gZBH4Ck20LlbLZsBLbKks4gOCIJ3JMOTAJtNjhSfs19_3naxx7R_KESWmMCPK-FVyuptAy3xBekCNGDiz90-n15DEmy2_Irow-2K6eLlBrGuqniV3ob7CC8gSFf2r0PJJSQ2OJ-sEScWEXL5N3j7jKs1HDrUHe5fH4JvKYITymoWOuSZi6pVitamc9Df7D5poVH1wKe-c-V2Q1ko2_mdG6OlgEbmeWV05kQngQ"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary">Aura Aesthetics</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Management Suite</p>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-fixed/20 transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-fixed/20 transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Appointments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-fixed/20 transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Clients
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-fixed/20 transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-primary font-bold bg-primary-container/50 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+                Reports
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-fixed/20 transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+<div class="mt-auto pt-6">
+<button class="w-full bg-gradient-to-r from-secondary-container to-secondary-fixed text-on-secondary-container font-label-md py-3 px-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                Book New Patient
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 w-full md:w-[calc(100%-16rem)] min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-20 px-margin-desktop bg-surface/40 backdrop-blur-md border-b border-white/50 shadow-sm shadow-primary/10 sticky top-0 z-10 w-full">
+<div class="flex items-center bg-surface-container-low rounded-full px-4 py-2 border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface w-48 placeholder:text-on-surface-variant/70" placeholder="Buscar..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-primary transition-all active:opacity-80 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all active:opacity-80">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white">
+<img alt="Practitioner Profile" class="w-full h-full object-cover" data-alt="A portrait of a serene clinic practitioner, softly lit, wearing a pristine white uniform in a bright, modern aesthetic clinic setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs91YDPYTEPkHuSWHMkx4Ut440VHN6sxDrnyMI6jWu95s_7vNwy4wZ5ON2lVtLLM83AKn87rDKg2Hh5mgDQ4p1UjP6wKT3MP6whApTtevklCtEySMAjROlTh4FMsyckh9a9F_CZdmLM9SDzPlDfLNLAsOA9J_NmfH73rcrReOaL8wsKbiRPq0ur_C0ITBt5kxmVA_4iKc1YsVpM_sqC2QaHac7Y0EgKmqGry37YURDRY724AU9dcJNzg"/>
+</div>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Relatórios e Desempenho</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Visão geral financeira e analítica da clínica.</p>
+</div>
+<div class="flex gap-4">
+<select class="bg-surface-container-low border-none rounded-xl text-body-md font-body-md px-4 py-2 shadow-sm focus:ring-1 focus:ring-primary">
+<option>Este Mês</option>
+<option>Último Mês</option>
+<option>Este Ano</option>
+</select>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-xl font-label-md hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span> Exportar
+                    </button>
+</div>
+</div>
+<!-- Metrics Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Card 1 -->
+<div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/30 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Receita Total</p>
+<h3 class="font-headline-md text-headline-md text-on-background">R$ 124.500</h3>
+</div>
+<div class="p-2 bg-tertiary-container rounded-lg text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 relative z-10">
+<span class="text-tertiary font-label-md text-label-md">+12.5%</span>
+<span class="text-caption font-caption text-on-surface-variant">vs. mês anterior</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-fixed/30 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Ticket Médio</p>
+<h3 class="font-headline-md text-headline-md text-on-background">R$ 1.850</h3>
+</div>
+<div class="p-2 bg-primary-container rounded-lg text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 relative z-10">
+<span class="text-tertiary font-label-md text-label-md">+5.2%</span>
+<span class="text-caption font-caption text-on-surface-variant">vs. mês anterior</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary-fixed/30 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Novos Pacientes</p>
+<h3 class="font-headline-md text-headline-md text-on-background">48</h3>
+</div>
+<div class="p-2 bg-secondary-container rounded-lg text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 relative z-10">
+<span class="text-tertiary font-label-md text-label-md">+15.0%</span>
+<span class="text-caption font-caption text-on-surface-variant">vs. mês anterior</span>
+</div>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Main Chart -->
+<div class="glass-card p-6 rounded-2xl lg:col-span-2">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">Receita Mensal</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-surface-container rounded-lg text-caption font-caption text-on-surface-variant hover:bg-surface-variant transition">Semana</button>
+<button class="px-3 py-1 bg-primary-container text-on-primary-container rounded-lg text-caption font-caption font-bold shadow-sm">Mês</button>
+</div>
+</div>
+<div class="h-64 w-full">
+<canvas id="revenueChart"></canvas>
+</div>
+</div>
+<!-- Secondary Chart / List -->
+<div class="glass-card p-6 rounded-2xl flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-6">Tratamentos Populares</h3>
+<div class="flex-1 space-y-4">
+<!-- Item 1 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-body-md text-body-md text-on-background">Harmonização Facial</span>
+<span class="font-label-md text-label-md text-on-surface-variant">45%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<!-- Item 2 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-body-md text-body-md text-on-background">Botox Completo</span>
+<span class="font-label-md text-label-md text-on-surface-variant">30%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-tertiary h-2 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-body-md text-body-md text-on-background">Bioestimuladores</span>
+<span class="font-label-md text-label-md text-on-surface-variant">15%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-secondary-fixed-dim h-2 rounded-full" style="width: 15%"></div>
+</div>
+</div>
+<!-- Item 4 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-body-md text-body-md text-on-background">Peeling Químico</span>
+<span class="font-label-md text-label-md text-on-surface-variant">10%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 10%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="glass-card rounded-2xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">Desempenho da Equipe</h3>
+<button class="text-primary hover:text-primary-fixed-dim font-label-md transition-colors">Ver todos</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low/50">
+<tr>
+<th class="p-4 font-label-md text-label-md text-on-surface-variant font-medium">Profissional</th>
+<th class="p-4 font-label-md text-label-md text-on-surface-variant font-medium">Especialidade</th>
+<th class="p-4 font-label-md text-label-md text-on-surface-variant font-medium">Atendimentos</th>
+<th class="p-4 font-label-md text-label-md text-on-surface-variant font-medium">Receita Gerada</th>
+<th class="p-4 font-label-md text-label-md text-on-surface-variant font-medium">Avaliação</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Portrait of a female aesthetics doctor with a warm smile, wearing a subtle gold necklace and a neat white coat, premium clinic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgPk2xecRuOKqyJC3SIQOGADy-RW7sxsmTibQRUrwuuNa0kYx7zrXwx3_n5n8f_krrtvOhClrhIXkQD1Vnf7Q-2ods1-65Z4hfwPZb9q-g3rem8CQkoTD10lv8uviZPHmKcgOaKXvitWSEOvhKYVTLd08XdC5ZnW-k_9H7wYkgCfmlJZgs4pXQ0a5C6cEkGLNyykoqyXg9puRYxMG0Otm0tym_yffionQIfTfApZh5gc-hgv1I4DZtwQ"/>
+</div>
+<span class="font-body-md text-body-md text-on-background font-medium">Dra. Helena Costa</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-primary-fixed/50 text-on-primary-fixed rounded-full text-caption font-caption">Injetáveis</span>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface-variant">142</td>
+<td class="p-4 font-body-md text-body-md text-on-background">R$ 85.000</td>
+<td class="p-4">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star_half" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Portrait of a male aesthetics specialist looking professional and calm, short hair, clinical white coat, soft bright environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASyDBMY5byL6y7P1xlTp1VE1VzhA-vCa7IMDfRCltrhcvIoTcydokHH_2X6ApAUTuSVNOdd7jOys5FgCtu_7M2mdCEWH4RbA-bRQq2IFnYFc_Be0ndhB1Y6FFP0ImsVMMjlZCuPG-dXg2aH6O0C7GvR37SadB1KnZ3H2A6kwo-h5LxLISEh1x5_3oA2nmYGnegPz0eCZhtLajCszLpuT_8HMZHTVzEdMMvZ-wn_9Kaae87myRVohGPLw"/>
+</div>
+<span class="font-body-md text-body-md text-on-background font-medium">Dr. Marcos Silva</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-tertiary-fixed/50 text-on-tertiary-fixed rounded-full text-caption font-caption">Laser</span>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface-variant">98</td>
+<td class="p-4 font-body-md text-body-md text-on-background">R$ 39.500</td>
+<td class="p-4">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Chart.js Configuration
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            // Gradients for aesthetics
+            const gradientPrimary = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientPrimary.addColorStop(0, 'rgba(108, 90, 86, 0.5)'); // primary color with opacity
+            gradientPrimary.addColorStop(1, 'rgba(108, 90, 86, 0.0)');
+
+            const gradientSecondary = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientSecondary.addColorStop(0, 'rgba(76, 100, 85, 0.4)'); // tertiary with opacity
+            gradientSecondary.addColorStop(1, 'rgba(76, 100, 85, 0.0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            label: 'Receita 2024',
+                            data: [65000, 78000, 82000, 95000, 110000, 105000, 124500],
+                            borderColor: '#6c5a56', // primary
+                            backgroundColor: gradientPrimary,
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#faf9f6',
+                            pointBorderColor: '#6c5a56',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Receita 2023',
+                            data: [50000, 62000, 68000, 75000, 80000, 85000, 92000],
+                            borderColor: '#4c6455', // tertiary
+                            backgroundColor: gradientSecondary,
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 0,
+                            pointHoverRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                color: '#4f4542' // on-surface-variant
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(250, 249, 246, 0.9)',
+                            titleColor: '#1a1c1a',
+                            bodyColor: '#4f4542',
+                            borderColor: '#e3e2e0',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                color: '#807471' // outline
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(227, 226, 224, 0.5)', // surface-variant
+                                drawBorder: false,
+                                tickLength: 0
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                color: '#807471',
+                                callback: function(value) {
+                                    return 'R$ ' + (value/1000) + 'k';
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
+        });
+    </script>
+</body></html>

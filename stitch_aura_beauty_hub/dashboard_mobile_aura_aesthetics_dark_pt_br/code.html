@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Aesthetics - Painel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "secondary-container": "#fed65b",
+                        "surface-container-low": "#f4f3f1",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "tertiary-container": "#cde8d5",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#53433f",
+                        "on-tertiary-fixed": "#082014",
+                        "on-secondary-container": "#745c00",
+                        "on-primary-fixed": "#251915",
+                        "tertiary-fixed": "#cee9d6",
+                        "primary-container": "#f4dcd6",
+                        "surface-dim": "#dbdad7",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f312f",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-primary-container": "#71605b",
+                        "surface-container": "#efeeeb",
+                        "primary-fixed": "#f5ddd7",
+                        "secondary": "#735c00",
+                        "on-tertiary-container": "#51695a",
+                        "primary": "#6c5a56",
+                        "inverse-primary": "#d8c2bc",
+                        "secondary-fixed": "#ffe088",
+                        "surface-variant": "#e3e2e0",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "surface": "#faf9f6",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "on-surface": "#1a1c1a",
+                        "surface-tint": "#6c5a56",
+                        "tertiary": "#4c6455",
+                        "surface-bright": "#faf9f6",
+                        "outline-variant": "#d2c3c0",
+                        "on-surface-variant": "#4f4542",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-error": "#ffffff",
+                        "outline": "#807471",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background-color: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .soft-shadow {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Hide scrollbar for cleaner look on mobile */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-[#121212] text-[#E0E0E0] font-body-md min-h-screen pb-24 selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar from JSON -->
+<header class="fixed top-0 w-full z-50 bg-[#121212]/80 backdrop-blur-xl border-b border-white/10 shadow-sm shadow-black/20">
+<div class="flex justify-between items-center px-margin-mobile h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center ring-2 ring-primary-fixed-dim">
+<img alt="Clinic Manager Profile" class="w-full h-full object-cover" data-alt="A close up, highly detailed professional headshot of a female clinic manager in a bright, modern aesthetic medicine clinic. High-key lighting, soft minimalist vibe, warm neutral tones. She looks welcoming and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBppIqyUW5vakkbeZ3VZPjOS6lfQk5OWvoosRSt014XtW5veMHd1R9Q3wyJPVbntou4SV9C7wGUXfZ_J88WeeP7mTcGKCjhPxtqeO-S5gSY3ekWajZwHXZiSEwkm_eNopjyDxNmvkDT2yNvqHpvJOxb4MUrwbs_MyuGGcB6fsHKDIw_4snr6E2OhCLaxX4PSpulzFYTfQjASuShLqYrM6S5CMojiQEOrIrm4SaQjg2o-o5zD6jIxPmR7A"/>
+</div>
+</div>
+<div class="font-display-lg text-display-lg tracking-widest text-primary-fixed-dim absolute left-1/2 transform -translate-x-1/2">
+                AURA
+            </div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container/20 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-container-max mx-auto space-y-8">
+<!-- Greeting -->
+<section class="animate-fade-in-up">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-white">Bom dia, Dra. Hayes</h1>
+<p class="font-body-md text-body-md text-[#A0A0A0] mt-1">Aqui está o resumo da sua clínica hoje.</p>
+</section>
+<!-- Monthly Overview Card -->
+<section>
+<h2 class="font-headline-md text-headline-md text-primary-fixed-dim mb-4">Visão Geral do Mês</h2>
+<div class="glass-card rounded-xl p-6 soft-shadow flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-[#A0A0A0]">Faturamento Total</p>
+<p class="font-display-lg text-[32px] font-semibold text-white mt-1">$42,500</p>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+12%</span>
+</div>
+</div>
+<div class="h-px bg-white/10 w-full"></div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-[#A0A0A0]">Novos Clientes</p>
+<p class="font-headline-md text-headline-md text-white mt-1">28</p>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+4%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Agenda de Hoje -->
+<section>
+<div class="flex justify-between items-end mb-4">
+<h2 class="font-headline-md text-headline-md text-primary-fixed-dim">Agenda de Hoje</h2>
+<a class="font-label-md text-label-md text-primary-fixed-dim underline underline-offset-4 decoration-primary-fixed-dim/30 hover:text-white transition-colors" href="#">Ver tudo</a>
+</div>
+<div class="space-y-4">
+<!-- Slot 1 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-tertiary-fixed-dim"></div>
+<div class="flex flex-col items-center min-w-[50px] pt-1">
+<span class="font-label-md text-label-md font-semibold text-white">09:00</span>
+<span class="font-caption text-caption text-[#A0A0A0]">45m</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-body-lg text-body-lg font-medium text-white">Eleanor Vance</h3>
+<span class="bg-tertiary-container/30 text-tertiary-fixed-dim px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Confirmado</span>
+</div>
+<p class="font-caption text-caption text-[#A0A0A0] mt-1">Preenchimento Facial &amp; Consulta</p>
+<div class="flex items-center gap-2 mt-3">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-variant">
+<img alt="Client" class="w-full h-full object-cover" data-alt="A headshot of an affluent older female client in a soft, bright clinical setting. High-end aesthetic, soft minimalist lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFSt-M5W-jB6V4Y0odAn1BGENLLFUVyVbzjETYUWhoaPA-Iuh64bYxs4h0UGsFpOfYI_ckvPPUPfpzFC3lyWPC7GzdjPOw9Cq-t39QutwxMSQTTkdOXDMurE_zx6CsgvLGjQbTt5vF8I72ojygOhfVn0HzyL_V6P0B-Mj1J5Gf4kishIHZvKv0asXr2sUFFjtJwdHul2E26XMfAU4Sp0iaDYYUfpVWlURujx8gJ1MCXU5KkL-wXNPOYQ"/>
+</div>
+<button class="p-1 rounded-full bg-white/5 hover:bg-white/10 text-[#A0A0A0] hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">message</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-fixed-dim"></div>
+<div class="flex flex-col items-center min-w-[50px] pt-1">
+<span class="font-label-md text-label-md font-semibold text-white">10:30</span>
+<span class="font-caption text-caption text-[#A0A0A0]">60m</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-body-lg text-body-lg font-medium text-white">Sophia Rossi</h3>
+<span class="bg-secondary-container/30 text-secondary-fixed-dim px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Chegou</span>
+</div>
+<p class="font-caption text-caption text-[#A0A0A0] mt-1">Resurfacing a Laser - Sessão 2</p>
+<div class="flex items-center gap-2 mt-3">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-variant">
+<img alt="Client" class="w-full h-full object-cover" data-alt="A headshot of a young professional female client with glowing skin in a soft, bright clinical setting. High-end aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdb-23x7GYQ3AS7m41k3ziBop-yagtL3ptb-t__vnHUIddH4NDlzyfcxYDcOf-RpiDGcb7sECTheEJMmvziWgmAcSBnyMP8twZx-WOI6UqhpGefvSs6ltNWVWP3cFOYPMgvwJ3aX2-JKqzzJZposha8mnYxN7ZSjd5iJPAqq6KNfce9HvIlughcWXTNViscX1mFewGUTFq5giLe1nLmW-X8qGx2MLwkx_wwa_LbqIW7Fyv5JZsZ3Q5Ug"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Slot 3 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start relative overflow-hidden opacity-70">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-white/20"></div>
+<div class="flex flex-col items-center min-w-[50px] pt-1">
+<span class="font-label-md text-label-md font-semibold text-white">13:00</span>
+<span class="font-caption text-caption text-[#A0A0A0]">30m</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-body-lg text-body-lg font-medium text-white">James Sterling</h3>
+</div>
+<p class="font-caption text-caption text-[#A0A0A0] mt-1">Retorno Botox</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Alertas de Estoque -->
+<section>
+<h2 class="font-headline-md text-headline-md text-primary-fixed-dim mb-4">Alertas de Estoque</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-card rounded-xl p-4 border-l-4 border-l-[#ff8a8a]">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-[#ff8a8a]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-caption text-caption text-[#ff8a8a] font-medium bg-[#ff8a8a]/20 px-2 py-0.5 rounded-full">Baixo</span>
+</div>
+<h3 class="font-label-md text-label-md font-semibold text-white leading-tight">Ácido Hialurônico</h3>
+<p class="font-caption text-caption text-[#A0A0A0] mt-1">3 unidades restantes</p>
+</div>
+<div class="glass-card rounded-xl p-4 border-l-4 border-l-[#ff8a8a]">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-[#ff8a8a]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-caption text-caption text-[#ff8a8a] font-medium bg-[#ff8a8a]/20 px-2 py-0.5 rounded-full">Baixo</span>
+</div>
+<h3 class="font-label-md text-label-md font-semibold text-white leading-tight">Lidocaína</h3>
+<p class="font-caption text-caption text-[#A0A0A0] mt-1">1 caixa restante</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar from JSON -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-[#121212]/90 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] md:hidden">
+<div class="flex justify-around items-center px-4 py-3 pb-safe">
+<!-- Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container/20 text-secondary-fixed-dim rounded-full px-5 py-1.5 transition-all duration-300 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-[10px] mt-1">Painel</span>
+</a>
+<!-- Appointments -->
+<a class="flex flex-col items-center justify-center text-[#A0A0A0] px-5 py-1.5 hover:text-primary-fixed-dim transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+<span class="font-label-md text-[10px] mt-1 hidden">Consultas</span>
+</a>
+<!-- Clients -->
+<a class="flex flex-col items-center justify-center text-[#A0A0A0] px-5 py-1.5 hover:text-primary-fixed-dim transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">group</span>
+<span class="font-label-md text-[10px] mt-1 hidden">Clientes</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-[#A0A0A0] px-5 py-1.5 hover:text-primary-fixed-dim transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-[10px] mt-1 hidden">Ajustes</span>
+</a>
+</div>
+</nav>
+<!-- Support for safe area inset on iOS -->
+<style>
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+    </style>
+</body></html>

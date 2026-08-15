@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Cliente {
+  id                String              @id @default(uuid())
+  nome              String
+  email             String?
+  telefone          String?
+  dataCadastro      DateTime            @default(now())
+  alergias          String?
+  avatarUrl         String?
+  dataNascimento    String?
+  objetivoPrincipal String?
+  tipoPele          String?
+  agendamentos      Agendamento[]
+  fotos             ClienteFoto[]
+  prontuarios       ClienteProntuario[]
+}
+
+model Agendamento {
+  id                   String                @id @default(uuid())
+  date                 String
+  startTime            String
+  duration             Int                   @default(60)
+  service              String
+  status               String                @default("AGENDADO")
+  googleEventId        String?
+  valor                String?
+  formaPagamento       String?
+  numeroParcelas       Int?
+  clienteId            String
+  cliente              Cliente               @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  movimentacoesEstoque EstoqueMovimentacao[]
+}
+
+model Configuracao {
+  id                  String  @id @default("1")
+  nomeFantasia        String  @default("Aura Aesthetics")
+  razaoSocial         String  @default("")
+  cnpj                String  @default("")
+  inscricaoMun        String  @default("")
+  email               String  @default("contato@auraaesthetics.com.br")
+  whatsapp            String  @default("(11) 99999-9999")
+  cep                 String  @default("01415-000")
+  endereco            String  @default("Rua Oscar Freire, 1000")
+  logoUrl             String  @default("https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA")
+  bairro              String  @default("Jardins")
+  cidade              String  @default("São Paulo")
+  estado              String  @default("SP")
+  instagram           String  @default("instagram.com/auraaesthetics")
+  googleRefreshToken  String?
+  googleCalendarId    String?
+  wahaUrl             String?
+  wahaSessionName     String?
+  msgConfirmacaoAtiva Boolean @default(true)
+  msgConfirmacaoTexto String  @default("Olá, {nome}! 🌸 Seu agendamento de *{servico}* foi confirmado para o dia *{data}* às *{hora}*. Te esperamos na Aura Aesthetics! Qualquer dúvida, é só chamar.")
+  msgLembreteAtiva    Boolean @default(true)
+  msgLembreteTexto    String  @default("Oi, {nome}! 😊 Passando para lembrar que amanhã você tem horário de *{servico}* às *{hora}* aqui na Aura Aesthetics. Até lá! 💜")
+  msgHoraLembrete     String  @default("08:00")
+  msgLembrete2hAtiva  Boolean @default(true)
+  msgLembrete2hTexto  String  @default("Oi, {nome}! ⏰ Lembrete: em 2 horas você tem *{servico}* às *{hora}* na Aura Aesthetics. Te esperamos! 💜")
+  
+  openAiApiKey        String?
+  openAiSystemPrompt  String? @default("Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.")
+  aiAgentActive       Boolean @default(false)
+  aiAutoSchedule      Boolean @default(false)
+}
+
+model Procedimento {
+  id      String @id @default(uuid())
+  nome    String
+  duracao Int    @default(60)
+  preco   Float  @default(0.0)
+  cor     String @default("bg-primary")
+}
+
+model EstoqueProduto {
+  id            String                @id @default(uuid())
+  nome          String
+  categoria     String                @default("Geral")
+  quantidade    Int                   @default(0)
+  unidade       String                @default("un.")
+  status        String                @default("Em Estoque")
+  criadoEm      DateTime              @default(now())
+  atualizadoEm  DateTime              @updatedAt
+  movimentacoes EstoqueMovimentacao[]
+}
+
+model EstoqueMovimentacao {
+  id            String         @id @default(uuid())
+  produtoId     String
+  quantidade    Int
+  tipo          String
+  agendamentoId String?
+  data          DateTime       @default(now())
+  agendamento   Agendamento?   @relation(fields: [agendamentoId], references: [id])
+  produto       EstoqueProduto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+}
+
+model ClienteFoto {
+  id        String   @id @default(uuid())
+  clienteId String
+  cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  url       String // Base64
+  tipo      String   @default("Antes") // "Antes", "Depois", "Outros"
+  data      DateTime @default(now())
+}
+
+model ClienteProntuario {
+  id        String   @id @default(uuid())
+  clienteId String
+  cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  titulo    String
+  texto     String
+  data      DateTime @default(now())
+}

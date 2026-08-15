@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Aesthetics - Gestão de Estoque</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#251915",
+                        "on-secondary-fixed": "#241a00",
+                        "secondary": "#735c00",
+                        "tertiary-container": "#cde8d5",
+                        "inverse-primary": "#d8c2bc",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-container": "#745c00",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "surface-container": "#efeeeb",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-container-high": "#e9e8e5",
+                        "on-secondary-fixed-variant": "#574500",
+                        "inverse-surface": "#2f312f",
+                        "outline": "#807471",
+                        "primary-container": "#f4dcd6",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#dbdad7",
+                        "primary-fixed": "#f5ddd7",
+                        "surface": "#faf9f6",
+                        "on-primary-container": "#71605b",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "on-tertiary-fixed": "#082014",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-surface-variant": "#4f4542",
+                        "outline-variant": "#d2c3c0",
+                        "secondary-container": "#fed65b",
+                        "tertiary-fixed": "#cee9d6",
+                        "surface-variant": "#e3e2e0",
+                        "surface-bright": "#faf9f6",
+                        "on-tertiary-container": "#51695a",
+                        "tertiary": "#4c6455",
+                        "background": "#faf9f6",
+                        "primary": "#6c5a56",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1a1c1a",
+                        "secondary-fixed": "#ffe088",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "surface-tint": "#6c5a56",
+                        "on-primary-fixed-variant": "#53433f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Playfair Display"],
+                        "caption": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #121212;
+            color: #faf9f6;
+        }
+        .glass-card {
+            background-color: rgba(47, 49, 47, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(210, 195, 192, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-[#121212]/80 backdrop-blur-md border-b border-outline/20 shadow-sm flex justify-between items-center h-20 px-margin-desktop ml-64 w-[calc(100%-16rem)] docked full-width top-0 z-50 fixed hidden md:flex">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-primary-fixed-dim tracking-tight">Aura Aesthetics</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant/70" data-icon="search">search</span>
+<input class="w-full bg-inverse-surface border-b border-outline/30 py-2 pl-10 pr-4 focus:outline-none focus:border-tertiary-fixed-dim focus:ring-0 transition-colors font-body-md text-body-md rounded-t-lg text-surface-bright placeholder-outline-variant/70" placeholder="Buscar no estoque..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-primary-fixed-dim">
+<button class="hover:text-primary-fixed transition-all opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-primary-fixed transition-all opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<img alt="Practitioner Profile" class="w-10 h-10 rounded-full object-cover ml-2 border border-outline/30" data-alt="A close-up portrait of a professional aesthetic clinic practitioner with a calm, welcoming expression. The lighting is soft and flattering, highlighting a clean, modern medical setting in the background. The mood is sophisticated and trustworthy, adhering to a high-end wellness aesthetic with a soft color palette of ivory and subtle sage greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2S5uhzi6B7qz1lHJ-sn8MLFC6tk8gRx1rxYi_YPCDv2kifQGkvN8enlb9nnt8zvV3CbQJnLH4J8PaFlYcjyJ7PteipfjR6lvFGAoMHr9g9lPOP2YBuDNLcBCudzlTubyugm-uEqhnoHq1GH_T9gEJTABNwKdfAv4DY1k5IQUlG5TYp-WU4mV-xm-GniJQaL15LhFKDSLdIIBobmMicrr-muW1c1D5owiwXMem86wL-zH5WopnaXdY7g"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="bg-inverse-surface/60 backdrop-blur-xl border-r border-outline/20 flex flex-col h-full py-margin-desktop px-4 h-screen w-64 fixed left-0 top-0 z-40 hidden md:flex">
+<div class="mb-12 px-4 flex flex-col items-start">
+<img alt="Clinic Logo" class="h-12 w-12 rounded-xl object-cover mb-4 shadow-sm" data-alt="A minimalist and elegant logo for 'Aura Aesthetics'. The design features delicate, intertwining lines forming an abstract 'A' shape. The primary color is a soft champagne gold against a pristine ivory background, embodying a luxurious and calming wellness sanctuary vibe. High-end, sophisticated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTBt-UBTRMd2Tv8y5U9PE1wu6FHVuG1Ph1P3eyF3ldH1M78nujeXiB5w0WkMlBniSEsnJkbR5CFKHubGCT4mUPesuF71WXqFzJFXCOa169pOlqL8wKPzTWZL9ZSoQcFyZV-WSZDfc17EwnO1Jc9xecoE42a94BU6qEi3PkzaG0e-JQ7TqIF3t8E_WtsYOO_qrKZcltMq0vdZYyWzzkU8h2IPEPtsv1s1pjtgBsO4kjaMDkQ3wBtlnA1Q"/>
+<h2 class="font-headline-md text-headline-md text-surface-bright">Aura Aesthetics</h2>
+<p class="font-caption text-caption text-outline-variant">Painel de Gestão</p>
+</div>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-outline-variant font-medium hover:bg-primary-fixed/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Painel
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-outline-variant font-medium hover:bg-primary-fixed/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                    Consultas
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-outline-variant font-medium hover:bg-primary-fixed/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Pacientes
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary-fixed-dim font-bold bg-primary-fixed/10 hover:bg-primary-fixed/20 transition-colors scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+                    Estoque
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-outline-variant font-medium hover:bg-primary-fixed/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+                    Relatórios
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-outline-variant font-medium hover:bg-primary-fixed/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Configurações
+                </a>
+</li>
+</ul>
+<button class="mt-auto w-full bg-primary-fixed-dim/20 text-primary-fixed-dim font-label-md text-label-md py-3 rounded-xl hover:bg-primary-fixed-dim/30 border border-primary-fixed-dim/30 transition-colors shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+            Agendar Paciente
+        </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 md:pt-32 px-margin-mobile md:px-margin-desktop pb-24 min-h-screen">
+<div class="max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-surface-bright mb-2">Gestão de Estoque</h1>
+<p class="font-body-md text-body-md text-outline-variant max-w-2xl">Acompanhe os níveis de produtos, gerencie reabastecimentos e garanta que sua clínica opere com excelência.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2.5 rounded-xl border border-outline text-surface-bright font-label-md text-label-md hover:bg-inverse-surface transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="shopping_cart">shopping_cart</span>
+                        Solicitar Reposição
+                    </button>
+<button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-fixed-dim to-primary-fixed text-on-primary-fixed font-label-md text-label-md hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        Adicionar Item
+                    </button>
+</div>
+</div>
+<!-- Dashboard Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="glass-card p-6 rounded-xl relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary-fixed-dim/20 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-caption text-caption text-outline-variant uppercase tracking-wider mb-1">Total de Itens</p>
+<h3 class="font-headline-md text-headline-md text-surface-bright">1,248</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-inverse-surface flex items-center justify-center text-primary-fixed-dim">
+<span class="material-symbols-outlined" data-icon="inventory">inventory</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">+12% vs mês anterior</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl relative overflow-hidden border-l-4 border-l-secondary-fixed-dim">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-secondary-fixed-dim/20 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-caption text-caption text-outline-variant uppercase tracking-wider mb-1">Estoque Baixo</p>
+<h3 class="font-headline-md text-headline-md text-surface-bright">15</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-fixed-dim/10 flex items-center justify-center text-secondary-fixed-dim">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-secondary-fixed-dim">
+<span class="font-label-md text-label-md">Requer atenção imeditata</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl relative overflow-hidden border-l-4 border-l-error">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-error/20 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-caption text-caption text-outline-variant uppercase tracking-wider mb-1">Esgotados</p>
+<h3 class="font-headline-md text-headline-md text-surface-bright">3</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="error">error</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-error">
+<span class="font-label-md text-label-md">Ação necessária</span>
+</div>
+</div>
+</div>
+<!-- Inventory List Section -->
+<div class="glass-card rounded-xl overflow-hidden">
+<!-- Filters & Search -->
+<div class="p-6 border-b border-outline/20 flex flex-col md:flex-row justify-between items-center gap-4 bg-inverse-surface/30">
+<div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
+<button class="px-4 py-1.5 rounded-full bg-primary-fixed-dim text-on-primary-fixed font-label-md text-label-md whitespace-nowrap">Todos</button>
+<button class="px-4 py-1.5 rounded-full bg-inverse-surface text-outline-variant font-label-md text-label-md hover:bg-surface-variant/10 transition-colors whitespace-nowrap border border-outline/30">Preenchedores</button>
+<button class="px-4 py-1.5 rounded-full bg-inverse-surface text-outline-variant font-label-md text-label-md hover:bg-surface-variant/10 transition-colors whitespace-nowrap border border-outline/30">Toxinas</button>
+<button class="px-4 py-1.5 rounded-full bg-inverse-surface text-outline-variant font-label-md text-label-md hover:bg-surface-variant/10 transition-colors whitespace-nowrap border border-outline/30">Skincare</button>
+<button class="px-4 py-1.5 rounded-full bg-inverse-surface text-outline-variant font-label-md text-label-md hover:bg-surface-variant/10 transition-colors whitespace-nowrap border border-outline/30">Descartáveis</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-inverse-surface/20 border-b border-outline/20">
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold">Produto</th>
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold">Categoria</th>
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold">Qtd</th>
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold">Unidade</th>
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold">Status</th>
+<th class="p-4 font-label-md text-label-md text-outline-variant font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline/10">
+<tr class="hover:bg-inverse-surface/40 transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed-dim/10 flex items-center justify-center text-primary-fixed-dim">
+<span class="material-symbols-outlined text-[20px]" data-icon="vaccines">vaccines</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-medium text-surface-bright">Ácido Hialurônico Voluma</p>
+<p class="font-caption text-caption text-outline-variant">Lote: L-2023-X9</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Preenchedores</td>
+<td class="p-4 font-body-md text-body-md font-medium text-surface-bright">24</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Caixas (2 ser.)</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption text-caption bg-tertiary-fixed-dim/20 text-tertiary-fixed-dim border border-tertiary-fixed-dim/30">
+                                        Em Estoque
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="p-2 text-outline-variant hover:text-primary-fixed-dim transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-inverse-surface/40 transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed-dim/10 flex items-center justify-center text-secondary-fixed-dim">
+<span class="material-symbols-outlined text-[20px]" data-icon="science">science</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-medium text-surface-bright">Toxina Botulínica Tipo A 100U</p>
+<p class="font-caption text-caption text-outline-variant">Lote: B-882-V</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Toxinas</td>
+<td class="p-4 font-body-md text-body-md font-medium text-secondary-fixed-dim">5</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Frascos</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption text-caption bg-secondary-fixed-dim/20 text-secondary-fixed-dim border border-secondary-fixed-dim/30">
+                                        Estoque Baixo
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="p-2 text-outline-variant hover:text-primary-fixed-dim transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-inverse-surface/40 transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]" data-icon="sanitizer">sanitizer</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-medium text-surface-bright">Sérum Vitamina C Pura 20%</p>
+<p class="font-caption text-caption text-outline-variant">Lote: S-001-C</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Skincare</td>
+<td class="p-4 font-body-md text-body-md font-medium text-error">0</td>
+<td class="p-4 font-body-md text-body-md text-outline-variant">Frascos (30ml)</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption text-caption bg-error/20 text-error border border-error/30">
+                                        Esgotado
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="p-2 text-outline-variant hover:text-primary-fixed-dim transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>

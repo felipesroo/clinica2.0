@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Aesthetics - Main Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#f5ddd7",
+                      "tertiary": "#4c6455",
+                      "tertiary-fixed": "#cee9d6",
+                      "on-background": "#1a1c1a",
+                      "surface-dim": "#dbdad7",
+                      "surface-bright": "#faf9f6",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f2f1ee",
+                      "primary": "#6c5a56",
+                      "on-secondary-container": "#745c00",
+                      "surface-tint": "#6c5a56",
+                      "on-tertiary-fixed-variant": "#344c3e",
+                      "surface-container": "#efeeeb",
+                      "on-tertiary-fixed": "#082014",
+                      "on-surface-variant": "#4f4542",
+                      "tertiary-container": "#cde8d5",
+                      "surface-container-high": "#e9e8e5",
+                      "surface-container-highest": "#e3e2e0",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#ffe088",
+                      "surface-container-low": "#f4f3f1",
+                      "surface": "#faf9f6",
+                      "secondary": "#735c00",
+                      "outline-variant": "#d2c3c0",
+                      "on-surface": "#1a1c1a",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#f4dcd6",
+                      "on-primary-fixed-variant": "#53433f",
+                      "on-primary-container": "#71605b",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#241a00",
+                      "on-tertiary-container": "#51695a",
+                      "secondary-fixed-dim": "#e9c349",
+                      "primary-fixed-dim": "#d8c2bc",
+                      "inverse-primary": "#d8c2bc",
+                      "surface-variant": "#e3e2e0",
+                      "tertiary-fixed-dim": "#b2cdbb",
+                      "on-primary-fixed": "#251915",
+                      "on-secondary-fixed-variant": "#574500",
+                      "secondary-container": "#fed65b",
+                      "outline": "#807471",
+                      "background": "#faf9f6",
+                      "inverse-surface": "#2f312f",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "unit": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "caption": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(244, 220, 214, 0.3);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #f5ddd7 0%, #d8c2bc 100%);
+            color: #251915;
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(244, 220, 214, 0.5);
+        }
+      </style>
+</head>
+<body class="text-on-surface antialiased overflow-x-hidden min-h-screen flex bg-background">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-margin-desktop px-4 h-screen w-64 fixed left-0 top-0 bg-surface-container-low/40 backdrop-blur-xl border-r border-white/50 z-50">
+<div class="mb-12 px-4 flex flex-col items-center text-center">
+<img alt="Clinic Logo" class="w-16 h-16 rounded-full mb-4 object-cover border-2 border-white shadow-sm" data-alt="A sophisticated, minimalist logo for a high-end aesthetic clinic named Aura Aesthetics. The logo features an elegant, abstract floral or geometric shape in soft champagne gold and ivory tones, reflecting a premium wellness sanctuary feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXwHuSkdlsn9eWBAJ80ondiOZKrVA4uMtmUVibaMMZ6sYmp_0bHRBw1n_eaJZVxW5V-Df3TTc4eyQDdlw6q5cYlc4yOTxK_Zrlnu7IraNEv5mdN1xaYrD5vBEOQuiH7pMT9BRJDQss3g0KnOicID0-TRDUH4bgBottBC_K8X7S2H2rZw2iI63BL2un_wodPfDU8tMmsVOq8OXs4vG1brE5bph-a4ajXY_WNkK5pDahegkXx9VQNnr4dA"/>
+<h1 class="font-display-lg text-display-lg text-primary mb-1">Aura Aesthetics</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Gestão Clínica</p>
+</div>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all text-primary font-bold bg-primary-container/50 font-body-md text-body-md group" data-state="active" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all hover:bg-primary-fixed/20 text-on-surface-variant font-medium font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span>Agendamentos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all hover:bg-primary-fixed/20 text-on-surface-variant font-medium font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Clientes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all hover:bg-primary-fixed/20 text-on-surface-variant font-medium font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Estoque</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all hover:bg-primary-fixed/20 text-on-surface-variant font-medium font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span>Relatórios</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all hover:bg-primary-fixed/20 text-on-surface-variant font-medium font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Configurações</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto pt-8">
+<button class="w-full py-3 px-4 rounded-xl font-label-md text-label-md btn-gradient flex items-center justify-center space-x-2">
+<span class="material-symbols-outlined">add</span>
+<span>Novo Agendamento</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="hidden md:flex justify-between items-center h-20 px-margin-desktop w-full bg-surface/40 backdrop-blur-md z-40 sticky top-0 shadow-sm shadow-primary/10">
+<div class="flex-1 flex items-center">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-lowest/60 border border-outline-variant/30 text-on-surface placeholder:text-on-surface-variant font-body-md text-body-md py-2 pl-12 pr-4 rounded-full focus:outline-none focus:ring-1 focus:ring-tertiary-fixed-dim focus:border-tertiary-fixed-dim transition-all" placeholder="Search patients, treatments, or dates..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-all rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-all rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<div class="w-px h-8 bg-outline-variant/30"></div>
+<img alt="Practitioner Profile" class="w-10 h-10 rounded-full object-cover cursor-pointer border-2 border-white shadow-sm" data-alt="A professional headshot of a female aesthetic practitioner in her 30s. She is smiling warmly, wearing a neat, high-end white clinic uniform. The background is a soft, airy clinical space with subtle natural lighting, conveying trust and luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA"/>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<div class="mb-10">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Bom dia, Dra. Hayes</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Here is your visão geral da clínica for today.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Bento Grid Left Column (Spans 8 cols) -->
+<div class="md:col-span-8 flex flex-col gap-gutter">
+<!-- Today's Schedule Card -->
+<div class="glass-card rounded-[2rem] p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">calendar_clock</span>
+                                Agenda de Hoje
+                            </h3>
+<button class="font-label-md text-label-md text-tertiary hover:text-tertiary-container transition-colors uppercase tracking-widest">VER TUDO</button>
+</div>
+<div class="space-y-4 flex-1">
+<!-- Appt 1 -->
+<div class="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/50 transition-colors border border-transparent hover:border-white/60">
+<div class="flex flex-col items-center justify-center min-w-[60px] text-primary">
+<span class="font-headline-md text-headline-md font-bold">09:00</span>
+<span class="font-caption text-caption text-on-surface-variant uppercase">AM</span>
+</div>
+<div class="w-1 h-12 bg-primary-container rounded-full mx-2"></div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-medium text-on-surface">Eleanor Vance</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Dermal Fillers &amp; Consultation</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-tertiary-container/30 text-tertiary text-caption font-label-md rounded-full">Confirmado</span>
+</div>
+</div>
+<!-- Appt 2 -->
+<div class="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/50 transition-colors border border-transparent hover:border-white/60">
+<div class="flex flex-col items-center justify-center min-w-[60px] text-primary">
+<span class="font-headline-md text-headline-md font-bold">10:30</span>
+<span class="font-caption text-caption text-on-surface-variant uppercase">AM</span>
+</div>
+<div class="w-1 h-12 bg-tertiary-fixed rounded-full mx-2"></div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-medium text-on-surface">Sophia Rossi</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Laser Resurfacing - Session 2</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant text-caption font-label-md rounded-full">Chegou</span>
+</div>
+</div>
+<!-- Appt 3 -->
+<div class="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/50 transition-colors border border-transparent hover:border-white/60">
+<div class="flex flex-col items-center justify-center min-w-[60px] text-primary opacity-50">
+<span class="font-headline-md text-headline-md font-bold">01:00</span>
+<span class="font-caption text-caption text-on-surface-variant uppercase">PM</span>
+</div>
+<div class="w-1 h-12 bg-outline-variant/30 rounded-full mx-2"></div>
+<div class="flex-1 opacity-60">
+<h4 class="font-body-lg text-body-lg font-medium text-on-surface">James Sterling</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Botox Follow-up</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Right Column (Spans 4 cols) -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Quick Actions -->
+<div class="glass-card rounded-[2rem] p-6">
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Ações Rápidas</h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest/50 hover:bg-white transition-all border border-white/40 shadow-sm text-center group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">add_circle</span>
+<span class="font-label-md text-label-md text-on-surface">Novo Agend.</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest/50 hover:bg-white transition-all border border-white/40 shadow-sm text-center group">
+<span class="material-symbols-outlined text-tertiary mb-2 group-hover:scale-110 transition-transform">person_add</span>
+<span class="font-label-md text-label-md text-on-surface">Novo Cliente</span>
+</button>
+</div>
+</div>
+<!-- Metrics -->
+<div class="glass-card rounded-[2rem] p-6 flex flex-col gap-4">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Visão Geral Mensal</h3>
+<div class="flex justify-between items-end pb-4 border-b border-outline-variant/20">
+<div>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider mb-1">FATURAMENTO TOTAL</p>
+<p class="font-display-lg text-display-lg text-primary text-3xl">$42,500</p>
+</div>
+<span class="flex items-center text-tertiary font-label-md text-label-md bg-tertiary-container/30 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span> +12%
+                             </span>
+</div>
+<div class="flex justify-between items-end pt-2">
+<div>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider mb-1">NOVOS CLIENTES</p>
+<p class="font-headline-lg text-headline-lg text-on-surface text-2xl">28</p>
+</div>
+<span class="flex items-center text-tertiary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span> +4%
+                            </span>
+</div>
+</div>
+<!-- Alerts -->
+<div class="glass-card rounded-[2rem] p-6 bg-error-container/10 border-error-container/30">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-error">warning</span>
+<h3 class="font-headline-md text-headline-md text-error text-xl">Alertas de Estoque</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex justify-between items-center font-body-md text-body-md text-on-surface">
+<span>Seringas de Ácido Hialurônico</span>
+<span class="font-bold text-error">2 restantes</span>
+</li>
+<li class="flex justify-between items-center font-body-md text-body-md text-on-surface">
+<span>Creme de Lidocaína (Tópico)</span>
+<span class="font-bold text-error">Baixo</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

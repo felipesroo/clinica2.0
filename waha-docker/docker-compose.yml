@@ -1,0 +1,19 @@
+services:
+  waha:
+    image: devlikeapro/waha
+    container_name: waha
+    platform: linux/amd64
+    shm_size: '1gb'
+    ports:
+      - "3001:3000"
+    environment:
+      - WAHA_LOG_LEVEL=info
+      - WAHA_DASHBOARD_USERNAME=admin
+      - WAHA_DASHBOARD_PASSWORD=123456
+      - WHATSAPP_SWAGGER_USERNAME=admin
+      - WHATSAPP_SWAGGER_PASSWORD=123456
+      - WAHA_API_KEY=aura123
+      - WHATSAPP_DEFAULT_ENGINE=NOWEB
+      - WHATSAPP_WEBHOOK_URL=http://host.docker.internal:3000/api/webhooks/waha
+      - WHATSAPP_WEBHOOK_EVENTS=message,message.any
+    restart: always

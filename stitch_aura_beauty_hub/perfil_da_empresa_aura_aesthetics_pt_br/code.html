@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil da Clínica - Aura Aesthetics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#faf9f6",
+                        "surface-container": "#efeeeb",
+                        "outline-variant": "#d2c3c0",
+                        "on-primary-container": "#71605b",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f4f3f1",
+                        "on-primary-fixed": "#251915",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#241a00",
+                        "inverse-on-surface": "#f2f1ee",
+                        "inverse-primary": "#d8c2bc",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed-dim": "#e9c349",
+                        "primary-fixed": "#f5ddd7",
+                        "secondary-container": "#fed65b",
+                        "primary": "#6c5a56",
+                        "secondary-fixed": "#ffe088",
+                        "inverse-surface": "#2f312f",
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-container-high": "#e9e8e5",
+                        "primary-container": "#f4dcd6",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "outline": "#807471",
+                        "secondary": "#735c00",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#4c6455",
+                        "surface-bright": "#faf9f6",
+                        "tertiary-fixed": "#cee9d6",
+                        "on-primary-fixed-variant": "#53433f",
+                        "background": "#faf9f6",
+                        "on-background": "#1a1c1a",
+                        "on-tertiary-fixed": "#082014",
+                        "surface-tint": "#6c5a56",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "tertiary-container": "#cde8d5",
+                        "surface-dim": "#dbdad7",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#51695a",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#745c00",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-surface-variant": "#4f4542",
+                        "on-surface": "#1a1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(244, 220, 214, 0.1), 0 2px 4px -1px rgba(244, 220, 214, 0.06);
+        }
+        
+        .premium-input {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(210, 195, 192, 0.3);
+            border-bottom: 1px solid #d2c3c0;
+            transition: all 0.3s ease;
+        }
+        
+        .premium-input:focus {
+            outline: none;
+            border-bottom: 2px solid #cee9d6;
+            box-shadow: 0 4px 15px rgba(206, 233, 214, 0.2);
+            background-color: #ffffff;
+        }
+
+        .gold-btn {
+            background: linear-gradient(135deg, #f5ddd7 0%, #d8c2bc 100%);
+            color: #251915;
+            transition: all 0.3s ease;
+        }
+        
+        .gold-btn:hover {
+            box-shadow: 0 10px 15px -3px rgba(244, 220, 214, 0.3);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen font-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface/40 dark:bg-surface-dim/40 docked full-width top-0 backdrop-blur-[20px] border-b border-white/50 flat no shadows flex justify-between items-center w-full px-margin-desktop py-4 md:pl-[280px] fixed z-40 transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-semibold text-primary dark:text-primary-fixed-dim">Aura Aesthetics</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 hidden md:flex">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:opacity-70 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:opacity-70 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help_outline</span>
+</button>
+</div>
+<img alt="Avatar do Administrador" class="w-10 h-10 rounded-full object-cover border border-white/50" data-alt="A professional headshot of a female clinic administrator with a warm smile, wearing a subtle cream blazer, soft lighting, sophisticated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyqcyH1FKgKb9B2rzIOebED94OzmcXNvnh9IjwIvKPx2LQjKh0aWovl38vYFJVj8rVDli4xBlKdwG9Q7aaSigMZBJhJjqpOYPu7NL7ydw76T6YSgNdhZZ5hr6DQ8-V5d0LyNqN0qFODSB9fNxglxzUP8077kx1SmMfwwrjDD9X___sbyg9Qg_9B7u4TYcxCzzdqWRm47c9qZrkVKMKl6n2aHCAyabe8CTvKiuXsbkMijUAQG0_iaeoEQ"/>
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile) -->
+<nav class="bg-surface dark:bg-surface-dim h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-surface-container-low backdrop-blur-md shadow-sm hidden md:flex flex-col py-margin-mobile px-4 z-50">
+<div class="mb-10 mt-6 px-4">
+<h1 class="font-headline-md text-headline-md font-semibold text-primary dark:text-primary-fixed-dim truncate">Aura Aesthetics</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Portal da Clínica</p>
+</div>
+<button class="gold-btn font-label-md text-label-md w-full py-3 rounded-lg mb-8 flex items-center justify-center gap-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+            Nova Reserva
+        </button>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-primary-container/30 dark:hover:bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-primary-container/30 dark:hover:bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-md text-label-md">Agendamentos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-primary-container/30 dark:hover:bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-primary-container/30 dark:hover:bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">spa</span>
+<span class="font-label-md text-label-md">Tratamentos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary dark:text-secondary-fixed border-r-2 border-primary dark:border-secondary-fixed font-semibold bg-primary-container/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-label-md text-label-md">Perfil</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto pt-6 border-t border-surface-variant/30">
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-primary-container/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configurações</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error-container/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="pt-24 pb-24 md:pl-64 md:pb-12 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto transition-all duration-300">
+<!-- Header -->
+<div class="mb-10">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Perfil da Clínica</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Gerencie as informações públicas e dados de contato da sua unidade Aura Aesthetics.</p>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Column: Identity & Contact -->
+<div class="col-span-1 md:col-span-4 flex flex-col gap-6">
+<!-- Visual Identity Card -->
+<section class="glass-card rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">image</span>
+                        Identidade Visual
+                    </h2>
+<div class="flex flex-col items-center justify-center gap-4">
+<div class="relative group cursor-pointer">
+<div class="w-32 h-32 rounded-full border-2 border-primary-container overflow-hidden bg-surface-container flex items-center justify-center shadow-sm">
+<img alt="Logotipo da Clínica" class="w-full h-full object-cover" data-alt="A minimalist logo design for a premium aesthetic clinic, featuring a delicate gold leaf motif on a soft cream background, highly detailed and elegant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0k47rPQUGyyCqs6mnYAEN8MyCA1NQK3ThNSL1LMAZ8D0UrEQLudG_h2cfy8CpPhkojr1j1KV-bcpIydm44OINmPPVgGj2oooRoQG3F8d6GhUObJpZIjvEtfv4SnjIlhNLDIxmP9Tvi7DD5lUVV1_VJFqTbE_XHI6ZGi2INxgK-4Gfa9Nc704DMQCkuyT3DTt0XK5YiHMJsIgWU-c8soit5fTg3ksOIcHuAmwFvhzF4TjzgiL4dxVfaA"/>
+</div>
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">upload</span>
+</div>
+</div>
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface mb-1">Logotipo Principal</p>
+<p class="font-caption text-caption text-on-surface-variant">Recomendado: PNG 500x500px</p>
+</div>
+</div>
+</section>
+<!-- Contact Channels Card -->
+<section class="glass-card rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">connect_without_contact</span>
+                        Canais de Contato
+                    </h2>
+<div class="space-y-5">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">E-mail Profissional</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface placeholder-on-surface-variant/50" type="email" value="contato@auraaesthetics.com.br"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">WhatsApp (Agendamentos)</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface placeholder-on-surface-variant/50" type="tel" value="(11) 99999-9999"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Instagram (URL)</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface placeholder-on-surface-variant/50" type="url" value="instagram.com/auraaesthetics"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: General Info & Location & Hours -->
+<div class="col-span-1 md:col-span-8 flex flex-col gap-6">
+<!-- General Info Card -->
+<section class="glass-card rounded-xl p-6 md:p-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">storefront</span>
+                        Informações Gerais
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Nome Fantasia</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="Aura Aesthetics Boutique"/>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Razão Social</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="Aura Clinica de Estetica LTDA"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">CNPJ</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="00.000.000/0001-00"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Inscrição Municipal</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="1234567-8"/>
+</div>
+</div>
+</section>
+<!-- Location Card -->
+<section class="glass-card rounded-xl p-6 md:p-8">
+<div class="flex justify-between items-start mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                            Localização
+                        </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<div class="col-span-1 md:col-span-4">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">CEP</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="01415-000"/>
+</div>
+<div class="col-span-1 md:col-span-8">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Endereço Completo</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="Rua Oscar Freire, 1000 - Conj 51"/>
+</div>
+<div class="col-span-1 md:col-span-5">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Bairro</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="Jardins"/>
+</div>
+<div class="col-span-1 md:col-span-5">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Cidade</label>
+<input class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface" type="text" value="São Paulo"/>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Estado</label>
+<select class="premium-input w-full rounded-lg px-4 py-3 font-body-md text-on-surface appearance-none bg-transparent">
+<option>SP</option>
+<option>RJ</option>
+<option>MG</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Action Bar -->
+<div class="flex justify-end gap-4 mt-4">
+<button class="px-6 py-3 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant/50 transition-colors" type="button">
+                        Cancelar
+                    </button>
+<button class="gold-btn px-8 py-3 rounded-lg font-label-md text-label-md flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-sm">save</span>
+                        Salvar Alterações
+                    </button>
+</div>
+</div>
+</form>
+</main>
+</body></html>

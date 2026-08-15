@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agendamentos - Aura Aesthetics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#f5ddd7",
+                        "tertiary": "#4c6455",
+                        "tertiary-fixed": "#cee9d6",
+                        "on-background": "#1a1c1a",
+                        "surface-dim": "#dbdad7",
+                        "surface-bright": "#faf9f6",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f2f1ee",
+                        "primary": "#6c5a56",
+                        "on-secondary-container": "#745c00",
+                        "surface-tint": "#6c5a56",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "surface-container": "#efeeeb",
+                        "on-tertiary-fixed": "#082014",
+                        "on-surface-variant": "#4f4542",
+                        "tertiary-container": "#cde8d5",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container-low": "#f4f3f1",
+                        "surface": "#faf9f6",
+                        "secondary": "#735c00",
+                        "outline-variant": "#d2c3c0",
+                        "on-surface": "#1a1c1a",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#f4dcd6",
+                        "on-primary-fixed-variant": "#53433f",
+                        "on-primary-container": "#71605b",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#241a00",
+                        "on-tertiary-container": "#51695a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "inverse-primary": "#d8c2bc",
+                        "surface-variant": "#e3e2e0",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "on-primary-fixed": "#251915",
+                        "on-secondary-fixed-variant": "#574500",
+                        "secondary-container": "#fed65b",
+                        "outline": "#807471",
+                        "background": "#faf9f6",
+                        "inverse-surface": "#2f312f",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "caption": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(30, 32, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Custom scrollbar for calendar */
+        .calendar-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .calendar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .calendar-scroll::-webkit-scrollbar-thumb {
+            background-color: #4f4542;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-[#1a1c1a] text-surface-bright font-body-md min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="hidden md:flex justify-between items-center h-20 px-margin-desktop ml-64 w-[calc(100%-16rem)] docked full-width top-0 bg-[#1a1c1a]/80 backdrop-blur-md border-b border-white/10 shadow-sm shadow-black/20 fixed z-30">
+<div class="flex items-center gap-4">
+<h1 class="font-display-lg text-display-lg text-primary-fixed">Aura Aesthetics</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-surface-dim" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-[#2f312f] border-b border-outline focus:border-tertiary-fixed focus:ring-0 focus:outline-none rounded-t-md font-body-md text-surface-bright transition-colors placeholder:text-surface-dim/70" placeholder="Pesquisar..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-primary-fixed">
+<button class="hover:text-primary-fixed transition-all p-2 rounded-full hover:bg-primary-fixed/20 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:text-primary-fixed transition-all p-2 rounded-full hover:bg-primary-fixed/20">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/20 soft-shadow">
+<img alt="Practitioner Profile" class="w-full h-full object-cover" data-alt="A close up, high key portrait of a female medical aesthetician with glowing skin, wearing subtle natural makeup, in a softly lit, serene clinic environment with a bright, minimalist glassmorphism aesthetic. Warm soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ1k3QpN4pvpamvXGcz5ZCQOpkfweCsThmgdYuiHHSzvGv77V-qSt_hR13d7KwuuyfVTt0toLIwsvCOrPxNvTtr3nDuJgv_KMzytCIWV4RqETxYcw0vP4v2ADx79VqcFP2ssw1qXXr2bXcIhFYITjw3WBuOA0G3ea2r3ABuek94nOIdv9ljYDH-M5Sa1WFznJYwZ_O4Raxh-Cns4hzPlB21j1aI03uq7iyCS47suIMsDevp9QOBeFCmA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-margin-desktop px-4 h-screen w-64 fixed left-0 top-0 bg-[#1a1c1a]/90 backdrop-blur-xl border-r border-white/10 z-40">
+<div class="flex items-center gap-3 mb-12 px-4">
+<div class="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary-fixed">
+<span class="material-symbols-outlined font-light text-3xl" data-icon="spa">spa</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary-fixed leading-tight">Aura</h2>
+<p class="font-caption text-caption text-surface-dim">Suite de Gestão</p>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-dim font-medium hover:bg-primary-fixed/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-surface-dim group-hover:text-primary-fixed transition-colors" data-icon="dashboard">dashboard</span>
+<span>Painel</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary-fixed font-bold bg-primary-fixed/20 Active: scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="calendar_today" data-weight="fill" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span>Agendamentos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-dim font-medium hover:bg-primary-fixed/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-surface-dim group-hover:text-primary-fixed transition-colors" data-icon="group">group</span>
+<span>Clientes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-dim font-medium hover:bg-primary-fixed/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-surface-dim group-hover:text-primary-fixed transition-colors" data-icon="inventory_2">inventory_2</span>
+<span>Estoque</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-dim font-medium hover:bg-primary-fixed/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-surface-dim group-hover:text-primary-fixed transition-colors" data-icon="bar_chart">bar_chart</span>
+<span>Relatórios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-dim font-medium hover:bg-primary-fixed/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-surface-dim group-hover:text-primary-fixed transition-colors" data-icon="settings">settings</span>
+<span>Configurações</span>
+</a>
+</div>
+<div class="mt-auto pt-6">
+<button class="w-full bg-gradient-to-r from-[#4f4542] to-[#2f312f] text-primary-fixed border border-white/10 font-label-md text-label-md py-3 px-4 rounded-xl soft-shadow hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2" onclick="document.getElementById('bookingModal').classList.remove('hidden')">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Agendar Novo Paciente
+            </button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="md:ml-64 pt-20 min-h-screen flex flex-col">
+<div class="flex-1 p-margin-mobile md:p-gutter max-w-container-max mx-auto w-full space-y-6">
+<!-- Page Header & Filters -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary-fixed mb-2">Agenda</h2>
+<p class="font-body-md text-body-md text-surface-dim">Gerencie seus próximos agendamentos e consultas estéticas.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+<div class="relative w-full md:w-48 glass-panel rounded-lg">
+<select class="w-full bg-transparent border-none text-surface-bright font-label-md text-label-md py-2 pl-3 pr-10 appearance-none focus:ring-0 cursor-pointer">
+<option value="all">Todos os Profissionais</option>
+<option value="dr-smith">Dra. Smith</option>
+<option value="nurse-jane">Enfermeira Jane</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-surface-dim" data-icon="expand_more">expand_more</span>
+</div>
+<div class="relative w-full md:w-48 glass-panel rounded-lg">
+<select class="w-full bg-transparent border-none text-surface-bright font-label-md text-label-md py-2 pl-3 pr-10 appearance-none focus:ring-0 cursor-pointer">
+<option value="all">Todos os Serviços</option>
+<option value="injectables">Injetáveis</option>
+<option value="laser">Terapia a Laser</option>
+<option value="facial">Tratamentos Faciais</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-surface-dim" data-icon="expand_more">expand_more</span>
+</div>
+<div class="flex bg-[#2f312f] rounded-lg p-1">
+<button class="px-3 py-1.5 rounded-md bg-[#4f4542] soft-shadow text-primary-fixed font-label-md text-label-md transition-all">Dia</button>
+<button class="px-3 py-1.5 rounded-md text-surface-dim font-label-md text-label-md hover:text-primary-fixed transition-all">Semana</button>
+<button class="px-3 py-1.5 rounded-md text-surface-dim font-label-md text-label-md hover:text-primary-fixed transition-all">Mês</button>
+</div>
+</div>
+</div>
+<!-- Calendar View (Bento/Glassmorphism hybrid) -->
+<div class="glass-panel rounded-2xl soft-shadow overflow-hidden flex flex-col h-[calc(100vh-220px)] min-h-[600px]">
+<!-- Calendar Header (Days) -->
+<div class="flex items-center border-b border-white/10 bg-[#1a1c1a]/30">
+<div class="w-20 shrink-0 border-r border-white/10 flex flex-col items-center justify-center p-4">
+<span class="font-label-md text-label-md text-surface-dim uppercase tracking-widest text-xs">Out</span>
+<span class="font-headline-md text-headline-md text-primary-fixed">24</span>
+</div>
+<!-- Time Axis Header -->
+<div class="flex-1 flex text-center">
+<div class="flex-1 py-4 border-r border-white/10">
+<p class="font-label-md text-label-md text-surface-dim">Sala 1</p>
+<p class="font-caption text-caption text-surface-dim/70">Dra. Smith</p>
+</div>
+<div class="flex-1 py-4 border-r border-white/10">
+<p class="font-label-md text-label-md text-surface-dim">Sala 2</p>
+<p class="font-caption text-caption text-surface-dim/70">Enfermeira Jane</p>
+</div>
+<div class="flex-1 py-4">
+<p class="font-label-md text-label-md text-surface-dim">Sala 3</p>
+<p class="font-caption text-caption text-surface-dim/70">Est. Emma</p>
+</div>
+</div>
+</div>
+<!-- Calendar Grid Body -->
+<div class="flex-1 overflow-y-auto calendar-scroll relative flex">
+<!-- Time Column -->
+<div class="w-20 shrink-0 border-r border-white/10 bg-[#1a1c1a]/50 relative">
+<!-- Generate times 9 AM to 5 PM -->
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">09:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">10:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">11:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">12:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">13:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">14:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">15:00</span></div>
+<div class="h-24 border-b border-white/10 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">16:00</span></div>
+<div class="h-24 relative"><span class="absolute -top-3 right-2 text-xs font-label-md text-surface-dim/60">17:00</span></div>
+</div>
+<!-- Rooms Columns -->
+<div class="flex-1 flex relative">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col pointer-events-none">
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+<div class="h-24 border-b border-white/10 w-full"></div>
+</div>
+<!-- Room 1 -->
+<div class="flex-1 border-r border-white/10 relative p-1">
+<!-- Appointment block (1 hour starting at 9:30) -->
+<div class="absolute top-[48px] left-1 right-1 h-[96px] bg-[#4f4542]/80 border border-primary-fixed-dim/30 rounded-lg p-2 soft-shadow backdrop-blur-md cursor-pointer hover:bg-[#4f4542] transition-colors z-10">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-label-md text-primary-fixed font-bold text-sm">Consulta de Botox</span>
+<span class="w-2 h-2 rounded-full bg-primary-fixed mt-1"></span>
+</div>
+<p class="font-caption text-caption text-surface-bright">Sarah Jenkins</p>
+<p class="font-caption text-caption text-surface-bright/70 mt-auto absolute bottom-2">09:30 - 10:30</p>
+</div>
+</div>
+<!-- Room 2 -->
+<div class="flex-1 border-r border-white/10 relative p-1">
+<!-- Appointment block (45 mins starting at 10:00) -->
+<div class="absolute top-[96px] left-1 right-1 h-[72px] bg-tertiary/60 border border-tertiary-fixed-dim/30 rounded-lg p-2 soft-shadow backdrop-blur-md cursor-pointer hover:bg-tertiary/80 transition-colors z-10">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-label-md text-tertiary-fixed font-bold text-sm truncate">Depilação a Laser</span>
+</div>
+<p class="font-caption text-caption text-surface-bright">Michael R.</p>
+<p class="font-caption text-caption text-surface-bright/70 mt-auto absolute bottom-2">10:00 - 10:45</p>
+</div>
+</div>
+<!-- Room 3 -->
+<div class="flex-1 relative p-1">
+<!-- Blocked Time -->
+<div class="absolute top-[192px] left-1 right-1 h-[96px] bg-[#2f312f]/80 border border-outline-variant/30 rounded-lg p-2 flex items-center justify-center opacity-70 cursor-not-allowed">
+<span class="font-label-md text-label-md text-surface-dim text-center flex flex-col items-center gap-1">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+                                    Horário de Almoço
+                                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Booking Modal Overlay -->
+<div class="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300" id="bookingModal">
+<!-- Slide-out panel -->
+<div class="w-full md:w-[480px] h-full bg-[#1a1c1a] shadow-2xl border-l border-white/10 flex flex-col transform transition-transform duration-300 ease-in-out translate-x-0">
+<div class="p-6 border-b border-white/10 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary-fixed">Agendar Novo Paciente</h3>
+<button class="p-2 rounded-full hover:bg-[#2f312f] transition-colors text-surface-dim" onclick="document.getElementById('bookingModal').classList.add('hidden')">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Progress Line -->
+<div class="flex items-center w-full mb-8">
+<div class="w-4 h-4 rounded-full bg-primary-fixed ring-4 ring-[#4f4542]"></div>
+<div class="flex-1 h-0.5 bg-primary-fixed/50"></div>
+<div class="w-4 h-4 rounded-full bg-outline"></div>
+<div class="flex-1 h-0.5 bg-outline"></div>
+<div class="w-4 h-4 rounded-full bg-outline"></div>
+</div>
+<form class="space-y-5">
+<div>
+<label class="block font-label-md text-label-md text-surface-dim mb-1">Nome do Cliente</label>
+<input class="w-full bg-[#2f312f] border-b border-outline focus:border-tertiary-fixed focus:ring-0 focus:outline-none py-2 font-body-md text-surface-bright transition-colors" placeholder="Ex: Jane Doe" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-surface-dim mb-1">Serviço</label>
+<div class="relative">
+<select class="w-full bg-[#2f312f] border-b border-outline focus:border-tertiary-fixed focus:ring-0 focus:outline-none py-2 appearance-none font-body-md text-surface-bright transition-colors cursor-pointer">
+<option disabled="" selected="">Selecione um tratamento</option>
+<option>Neuromoduladores (Botox/Dysport)</option>
+<option>Preenchimentos Dérmicos</option>
+<option>Resurfacing a Laser</option>
+<option>Peeling Químico</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-surface-dim" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-surface-dim mb-1">Data</label>
+<div class="relative">
+<input class="w-full bg-[#2f312f] border-b border-outline focus:border-tertiary-fixed focus:ring-0 focus:outline-none py-2 font-body-md text-surface-bright transition-colors" type="date"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-surface-dim mb-1">Horário</label>
+<div class="relative">
+<input class="w-full bg-[#2f312f] border-b border-outline focus:border-tertiary-fixed focus:ring-0 focus:outline-none py-2 font-body-md text-surface-bright transition-colors" type="time"/>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-surface-dim mb-2">Profissional</label>
+<div class="flex gap-3">
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="practitioner" type="radio"/>
+<div class="p-3 rounded-lg border border-outline peer-checked:bg-[#4f4542] peer-checked:border-primary-fixed peer-checked:text-primary-fixed transition-all text-center h-full">
+<div class="w-10 h-10 mx-auto rounded-full bg-[#1a1c1a] overflow-hidden mb-2">
+<img alt="Dr Smith" class="w-full h-full object-cover" data-alt="Small headshot of a female aesthetician with blonde hair in a bright clinic setting, warm high key lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKub0pIDc__cuzM9RV-Gar4nAmkLyAO_VZBFVwwUIrBCN9crlPNda1HWcU0sqsjlm_CNwXbzxLASNnGQqlNTUAnM95YouL76rCtrDRuyH80n0iRk0oqzwtBlzvUNcQe3st8KiJlPg66_vpxOcuLeo1pCcCpsD6-DP44PbmipD-F5xi0FOA8ggr6DuY8jR5mMkY4CkEHqIHEIDdXb8BJp0ofyQiLURxnHu11nokU3LyVfdebNKRB2ZSqg"/>
+</div>
+<span class="font-label-md text-label-md text-sm text-surface-bright">Dra. Smith</span>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="practitioner" type="radio"/>
+<div class="p-3 rounded-lg border border-outline peer-checked:bg-[#4f4542] peer-checked:border-primary-fixed peer-checked:text-primary-fixed transition-all text-center h-full">
+<div class="w-10 h-10 mx-auto rounded-full bg-[#1a1c1a] overflow-hidden mb-2">
+<img alt="Nurse Jane" class="w-full h-full object-cover" data-alt="Small headshot of a female nurse injector with dark hair in a bright modern clinic setting, warm high key lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArd9VarZcpThNpb11K-FDiGJxPmSiWDBm614fjC4dUc-tCUvbJeAL4e7CPnmNoNbGaBgUn2hNSwfBgW4a2-huueE5dGr4bb2h5EFrRz9zU0wGVJn2VCQtrnWbrFUuWinNWDi1ibgRWe0C-ld2wdAOuMgyq_lbmR3Yt4R2IgyMlfBYXoEjo_hiVYYY0yKiJLK4x-5G_Md7_i2rJIz5Y5chXWIbBl_WN2O49VfBCy_Fb7E5C9tDjJ8CCmw"/>
+</div>
+<span class="font-label-md text-label-md text-sm text-surface-bright">Enfermeira Jane</span>
+</div>
+</label>
+</div>
+</div>
+</form>
+</div>
+<div class="p-6 border-t border-white/10 bg-[#1a1c1a]/50 backdrop-blur-md">
+<button class="w-full bg-[#4f4542] text-primary-fixed font-label-md text-label-md py-3 px-4 rounded-xl soft-shadow hover:bg-[#2f312f] transition-all duration-300 border border-primary-fixed/20" type="button">
+                    Confirmar Agendamento
+                </button>
+</div>
+</div>
+</div>
+</body></html>

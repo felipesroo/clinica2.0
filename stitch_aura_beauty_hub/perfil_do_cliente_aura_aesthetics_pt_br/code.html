@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil do Paciente - Aura Aesthetics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-secondary-fixed-variant": "#574500",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#d2c3c0",
+                        "surface-tint": "#6c5a56",
+                        "on-surface-variant": "#4f4542",
+                        "on-surface": "#1a1c1a",
+                        "secondary": "#735c00",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#251915",
+                        "primary": "#6c5a56",
+                        "on-primary-fixed-variant": "#53433f",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-primary-container": "#71605b",
+                        "surface-variant": "#e3e2e0",
+                        "surface-bright": "#faf9f6",
+                        "outline": "#807471",
+                        "surface": "#faf9f6",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container-highest": "#e3e2e0",
+                        "primary-fixed-dim": "#d8c2bc",
+                        "background": "#faf9f6",
+                        "on-secondary-container": "#745c00",
+                        "tertiary-fixed": "#cee9d6",
+                        "on-tertiary-container": "#51695a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#f5ddd7",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#241a00",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#4c6455",
+                        "on-tertiary-fixed-variant": "#344c3e",
+                        "secondary-container": "#fed65b",
+                        "tertiary-fixed-dim": "#b2cdbb",
+                        "surface-container-low": "#f4f3f1",
+                        "inverse-primary": "#d8c2bc",
+                        "surface-container-high": "#e9e8e5",
+                        "on-error": "#ffffff",
+                        "surface-container": "#efeeeb",
+                        "on-background": "#1a1c1a",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#f4dcd6",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed": "#082014",
+                        "tertiary-container": "#cde8d5",
+                        "inverse-surface": "#2f312f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-md": ["Inter"],
+                        "caption": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(244, 220, 214, 0.3), 0 2px 4px -1px rgba(244, 220, 214, 0.2);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #71605b, #b2cdbb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 z-40 bg-surface/40 backdrop-blur-xl dark:bg-surface-container-low/40 border-r border-white/50 dark:border-outline-variant/20 shadow-md shadow-primary/5 flex-col p-unit gap-2">
+<div class="px-4 py-6 mb-4">
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim">Aura Aesthetics</h1>
+<p class="font-label-md text-label-md text-on-surface-variant/70 mt-1">Medical Sanctuary</p>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-surface-variant/80 font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-surface-variant/80 font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Appointments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container/50 dark:bg-primary-fixed-dim/20 text-on-primary-container dark:text-primary-fixed-dim font-bold rounded-lg font-label-md text-label-md scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Clients
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-surface-variant/80 font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-surface-variant/80 font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Reports
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-surface-variant/80 font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+                Profile
+            </a>
+</div>
+<div class="mt-auto border-t border-white/50 pt-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-low/50 font-label-md text-label-md rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="hidden md:flex justify-between items-center px-margin-desktop w-full h-16 bg-surface/40 backdrop-blur-xl dark:bg-surface-container-low/40 docked full-width top-0 sticky z-50 border-b border-white/50 dark:border-outline-variant/20 shadow-sm shadow-primary/10">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-semibold text-primary dark:text-primary-fixed-dim">Aura Aesthetics</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border-b border-outline-variant focus:border-tertiary focus:ring-0 focus:outline-none text-body-md rounded-t-lg transition-colors" placeholder="Search..." type="text"/>
+</div>
+<button class="text-on-surface-variant/70 hover:bg-primary-container/30 transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant/70 hover:bg-primary-container/30 transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="Practitioner Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small circular profile picture of a professional medical aesthetician in a bright, clean clinic setting. Soft lighting, high-end look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPl9M2YFCyLBBz18C17BFQiqzdAAOv1k_f2OiWcTi6Pdqbq00zt60dEn8c40-bjajJjvsupmJHhA8ZCR048eXXIOkwp5IlX3IzHssjalJamgaTltSEW2BAORKojAcd2N_oKwr_qNwujMsu3DMOO3gReNesWqrSLKRvrBFDXGOzt6vnkcwe47aSoYTsBgv8iDGgRtkpUKb7ZV_XpRlnkTWsadkd2-l5RC-s_QwFDsnfOz0ziJxzbY7EFg"/>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Breadcrumbs & Title -->
+<div class="mb-8">
+<nav class="flex items-center gap-2 font-caption text-caption text-on-surface-variant mb-4">
+<a class="hover:text-primary transition-colors" href="#">Clientes</a>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface">Eleanor Vance</span>
+</nav>
+<h2 class="font-headline-lg text-headline-lg md:text-[32px] text-primary">Perfil do Paciente</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Sidebar (Patient Card) -->
+<div class="lg:col-span-4 xl:col-span-3">
+<div class="glass-card rounded-xl p-6 flex flex-col items-center text-center sticky top-24">
+<div class="relative mb-4">
+<img alt="Eleanor Vance" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-sm" data-alt="A portrait photo of a sophisticated woman in her mid-30s with flawless skin, looking relaxed in a high-end wellness sanctuary. Soft natural light, luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqR3J1HbL5gf6_EcfOYqfJyPvfh_hyrUnLLAhHPdpSx-i2ehoCpQXhZROP3XiXb1jWhGQGArILnM1iAdS8etQziDJAXjlK_DOlMDyTedT1z0bQQ8k0CIpQYYLy9GpTW9sfGnk1cO3qbixzX2AOVNxu6A8wMDlnz-eiCLcM1O-ofnpzOrKf7oyvASk0YiiUcpliyK9YeFVYHt_V3t1oJyOCY1whE_WMoQxKjm2RM_dpKWM7TnU0nGXKYA"/>
+<span class="absolute bottom-0 right-2 bg-secondary-container text-on-secondary-container font-caption text-[10px] px-2 py-1 rounded-full border border-white font-bold uppercase tracking-wider shadow-sm">VIP</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Eleanor Vance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Membro desde 2022</p>
+<div class="w-full flex flex-col gap-3 mb-6 border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-3 text-left">
+<span class="material-symbols-outlined text-outline" data-icon="phone_iphone">phone_iphone</span>
+<span class="font-body-md text-body-md text-on-surface">+55 11 98765-4321</span>
+</div>
+<div class="flex items-center gap-3 text-left">
+<span class="material-symbols-outlined text-outline" data-icon="mail">mail</span>
+<span class="font-body-md text-body-md text-on-surface truncate">eleanor.v@email.com</span>
+</div>
+<div class="flex items-center gap-3 text-left">
+<span class="material-symbols-outlined text-outline" data-icon="cake">cake</span>
+<span class="font-body-md text-body-md text-on-surface">14 de Março (34 anos)</span>
+</div>
+</div>
+<div class="w-full flex flex-col gap-3">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary-container/80 font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+                                WhatsApp
+                            </button>
+<button class="w-full bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+                                Editar Perfil
+                            </button>
+</div>
+</div>
+</div>
+<!-- Main Content Area (Tabs) -->
+<div class="lg:col-span-8 xl:col-span-9">
+<!-- Tab Navigation -->
+<div class="border-b border-outline-variant/30 mb-8 overflow-x-auto hide-scrollbar">
+<nav class="flex gap-8 whitespace-nowrap px-2">
+<button class="font-label-md text-label-md py-4 text-primary border-b-2 border-primary font-semibold">Visão Geral</button>
+<button class="font-label-md text-label-md py-4 text-on-surface-variant hover:text-on-surface transition-colors">Procedimentos</button>
+<button class="font-label-md text-label-md py-4 text-on-surface-variant hover:text-on-surface transition-colors">Galeria</button>
+<button class="font-label-md text-label-md py-4 text-on-surface-variant hover:text-on-surface transition-colors">Prontuário</button>
+</nav>
+</div>
+<!-- Overview Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Clinical Summary -->
+<div class="glass-card rounded-xl p-6 md:col-span-2">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-headline-md text-headline-md text-on-surface">Resumo Clínico</h4>
+<button class="text-tertiary hover:text-on-tertiary-container"><span class="material-symbols-outlined" data-icon="edit_note">edit_note</span></button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div>
+<p class="font-caption text-caption text-outline mb-1 uppercase tracking-wider">Alergias</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-error-container text-on-error-container font-label-md text-[12px] px-3 py-1 rounded-full">Látex</span>
+<span class="bg-surface-container text-on-surface font-label-md text-[12px] px-3 py-1 rounded-full">Nenhuma medicamentosa</span>
+</div>
+</div>
+<div>
+<p class="font-caption text-caption text-outline mb-1 uppercase tracking-wider">Tipo de Pele</p>
+<p class="font-body-md text-body-md text-on-surface">Mista, tendência à sensibilidade.</p>
+</div>
+<div>
+<p class="font-caption text-caption text-outline mb-1 uppercase tracking-wider">Objetivo Principal</p>
+<p class="font-body-md text-body-md text-on-surface">Prevenção de linhas finas e viço.</p>
+</div>
+</div>
+</div>
+<!-- Recent Treatments Bento -->
+<div class="glass-card rounded-xl p-6">
+<h4 class="font-headline-md text-[20px] text-on-surface mb-4">Último Procedimento</h4>
+<div class="bg-surface-container-low rounded-lg p-4 border border-outline-variant/20">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h5 class="font-body-md font-medium text-on-surface">Botox Preventivo</h5>
+<p class="font-caption text-caption text-on-surface-variant">Terço superior</p>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container font-caption text-[11px] px-2 py-1 rounded-full font-medium">12 Nov 2023</span>
+</div>
+<p class="font-body-md text-[14px] text-on-surface-variant mt-3 border-t border-outline-variant/20 pt-3">Dra. Marina Silva. Retoque realizado em 15 dias sem intercorrências.</p>
+</div>
+</div>
+<!-- Next Appointment Bento -->
+<div class="glass-card rounded-xl p-6">
+<h4 class="font-headline-md text-[20px] text-on-surface mb-4">Próximo Agendamento</h4>
+<div class="bg-primary-fixed text-on-primary-fixed-variant rounded-lg p-4 border border-primary-fixed-dim/50 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface rounded-full flex flex-col items-center justify-center text-primary shadow-sm">
+<span class="font-label-md font-bold text-[14px] leading-tight">28</span>
+<span class="font-caption text-[10px] uppercase">Dez</span>
+</div>
+<div>
+<h5 class="font-body-md font-medium">Peeling Químico</h5>
+<p class="font-caption text-caption opacity-80">14:00 - 15:00</p>
+</div>
+</div>
+<button class="bg-surface/50 hover:bg-surface text-primary p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="event">event</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
