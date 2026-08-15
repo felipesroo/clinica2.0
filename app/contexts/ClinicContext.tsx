@@ -35,9 +35,14 @@ export function ClinicProvider({ children }: { children: React.ReactNode }) {
   const [isPending, startTransition] = useTransition();
 
   const fetchAppointments = async () => {
-    const data = await getAppointments();
-    setAppointments(data);
-    setIsLoaded(true);
+    try {
+      const data = await getAppointments();
+      setAppointments(data || []);
+    } catch (err) {
+      console.error("Failed to load appointments:", err);
+    } finally {
+      setIsLoaded(true);
+    }
   };
 
   useEffect(() => {

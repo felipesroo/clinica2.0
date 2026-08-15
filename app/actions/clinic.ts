@@ -7,28 +7,29 @@ import { sendWhatsAppMessage } from '../../lib/whatsapp';
 import { reverterBaixaAgendamento } from './inventory';
 
 export async function getAppointments() {
-  const agendamentos = await prisma.agendamento.findMany({
-    include: {
-      cliente: true,
-    }
-  });
-
-  const localAppointments = agendamentos.map((a: any) => ({
-    id: a.id,
-    patientName: a.cliente.nome,
-    patientPhone: a.cliente.telefone || "",
-    service: a.service,
-    date: a.date,
-    startTime: a.startTime,
-    duration: a.duration,
-    googleEventId: a.googleEventId,
-    clienteId: a.clienteId,
-    valor: a.valor,
-    formaPagamento: a.formaPagamento,
-    numeroParcelas: a.numeroParcelas,
-  }));
-
   try {
+    const agendamentos = await prisma.agendamento.findMany({
+      include: {
+        cliente: true,
+      }
+    });
+
+    const localAppointments = agendamentos.map((a: any) => ({
+      id: a.id,
+      patientName: a.cliente.nome,
+      patientPhone: a.cliente.telefone || "",
+      service: a.service,
+      date: a.date,
+      startTime: a.startTime,
+      duration: a.duration,
+      googleEventId: a.googleEventId,
+      clienteId: a.clienteId,
+      valor: a.valor,
+      formaPagamento: a.formaPagamento,
+      numeroParcelas: a.numeroParcelas,
+    }));
+
+    try {
     const today = new Date();
     // Fetch from 1 month ago to 3 months in the future
     const timeMin = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString();
@@ -125,6 +126,10 @@ export async function getAppointments() {
   } catch (err) {
     console.error("Failed to merge external Google events", err);
     return localAppointments;
+  }
+  } catch (outerErr) {
+    console.error("Failed to fetch appointments from DB:", outerErr);
+    return [];
   }
 }
 
