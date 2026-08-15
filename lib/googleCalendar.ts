@@ -1,17 +1,21 @@
 import { google } from 'googleapis';
 import { prisma } from '@/lib/prisma';
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI
-);
+function getOAuthClient() {
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://agenda.drajordanefaria.com/api/auth/google/callback';
+  return new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    redirectUri
+  );
+}
 
 export async function getGoogleAuthUrl() {
   const scopes = [
     'https://www.googleapis.com/auth/calendar.events',
   ];
 
-  return oauth2Client.generateAuthUrl({
+  const client = getOAuthClient();
+  return client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
     prompt: 'consent' // Force to get refresh token
@@ -19,7 +23,8 @@ export async function getGoogleAuthUrl() {
 }
 
 export async function authorizeWithCode(code: string) {
-  const { tokens } = await oauth2Client.getToken(code);
+  const client = getOAuthClient();
+  const { tokens } = await client.getToken(code);
   if (tokens.refresh_token) {
     // Save to settings
     await prisma.configuracao.update({

@@ -13,6 +13,13 @@ export async function GET(request: Request) {
     }
   }
 
+  // Determine public base URL safely behind reverse proxies
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
+  const isInternalHost = !host || host.includes('0.0.0.0') || host.includes('localhost') || host.includes('127.0.0.1');
+  const baseUrl = isInternalHost
+    ? (process.env.COOLIFY_FQDN ? `https://${process.env.COOLIFY_FQDN}` : 'https://agenda.drajordanefaria.com')
+    : `https://${host}`;
+
   // Redirect back to settings page
-  return NextResponse.redirect(new URL('/configuracoes', request.url));
+  return NextResponse.redirect(`${baseUrl}/configuracoes`);
 }
