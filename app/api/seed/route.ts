@@ -155,8 +155,8 @@ export async function GET(request: Request) {
     const config = await prisma.configuracao.upsert({
       where: { id: "1" },
       update: {
-        nomeFantasia: "Dra. Jordane F Faria",
-        razaoSocial: "Saúde Estetica",
+        nomeFantasia: "Estética Avançada",
+        razaoSocial: "Dra. Jordane Ferreira Faria Estética Avançada",
         wahaUrl: "http://waha:3000",
         wahaSessionName: "default",
         msgConfirmacaoAtiva: true,
@@ -165,8 +165,8 @@ export async function GET(request: Request) {
       },
       create: {
         id: "1",
-        nomeFantasia: "Dra. Jordane F Faria",
-        razaoSocial: "Saúde Estetica",
+        nomeFantasia: "Estética Avançada",
+        razaoSocial: "Dra. Jordane Ferreira Faria Estética Avançada",
         wahaUrl: "http://waha:3000",
         wahaSessionName: "default",
         msgConfirmacaoAtiva: true,

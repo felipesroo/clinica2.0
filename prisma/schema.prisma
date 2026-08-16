@@ -41,11 +41,11 @@ model Agendamento {
 
 model Configuracao {
   id                  String  @id @default("1")
-  nomeFantasia        String  @default("Aura Aesthetics")
+  nomeFantasia        String  @default("Estética Avançada")
   razaoSocial         String  @default("")
   cnpj                String  @default("")
   inscricaoMun        String  @default("")
-  email               String  @default("contato@auraaesthetics.com.br")
+  email               String  @default("contato@drajordanefaria.com")
   whatsapp            String  @default("(11) 99999-9999")
   cep                 String  @default("01415-000")
   endereco            String  @default("Rua Oscar Freire, 1000")
@@ -53,18 +53,18 @@ model Configuracao {
   bairro              String  @default("Jardins")
   cidade              String  @default("São Paulo")
   estado              String  @default("SP")
-  instagram           String  @default("instagram.com/auraaesthetics")
+  instagram           String  @default("instagram.com/drajordanefaria")
   googleRefreshToken  String?
   googleCalendarId    String?
   wahaUrl             String?
   wahaSessionName     String?
   msgConfirmacaoAtiva Boolean @default(true)
-  msgConfirmacaoTexto String  @default("Olá, {nome}! 🌸 Seu agendamento de *{servico}* foi confirmado para o dia *{data}* às *{hora}*. Te esperamos na Aura Aesthetics! Qualquer dúvida, é só chamar.")
+  msgConfirmacaoTexto String  @default("Olá, {nome}! 🌸 Seu agendamento de *{servico}* foi confirmado para o dia *{data}* às *{hora}*. Te esperamos na Estética Avançada! Qualquer dúvida, é só chamar.")
   msgLembreteAtiva    Boolean @default(true)
-  msgLembreteTexto    String  @default("Oi, {nome}! 😊 Passando para lembrar que amanhã você tem horário de *{servico}* às *{hora}* aqui na Aura Aesthetics. Até lá! 💜")
+  msgLembreteTexto    String  @default("Oi, {nome}! 😊 Passando para lembrar que amanhã você tem horário de *{servico}* às *{hora}* aqui na Estética Avançada. Até lá! 💜")
   msgHoraLembrete     String  @default("08:00")
   msgLembrete2hAtiva  Boolean @default(true)
-  msgLembrete2hTexto  String  @default("Oi, {nome}! ⏰ Lembrete: em 2 horas você tem *{servico}* às *{hora}* na Aura Aesthetics. Te esperamos! 💜")
+  msgLembrete2hTexto  String  @default("Oi, {nome}! ⏰ Lembrete: em 2 horas você tem *{servico}* às *{hora}* na Estética Avançada. Te esperamos! 💜")
   
   openAiApiKey        String?
   openAiSystemPrompt  String? @default("Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.")
