@@ -24,6 +24,7 @@ interface ClinicContextType {
   addAppointment: (app: Appointment) => Promise<string>;
   updateAppointment: (app: Appointment) => Promise<string>;
   deleteAppointment: (id: string) => Promise<void>;
+  refreshAppointments: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -66,6 +67,10 @@ export function ClinicProvider({ children }: { children: React.ReactNode }) {
     await fetchAppointments();
   };
 
+  const refreshAppointments = async () => {
+    await fetchAppointments();
+  };
+
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -75,7 +80,7 @@ export function ClinicProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ClinicContext.Provider value={{ appointments, addAppointment, updateAppointment, deleteAppointment, isLoading: isPending }}>
+    <ClinicContext.Provider value={{ appointments, addAppointment, updateAppointment, deleteAppointment, refreshAppointments, isLoading: isPending }}>
       {children}
     </ClinicContext.Provider>
   );

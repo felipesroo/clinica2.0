@@ -6,7 +6,7 @@ import { useClinic, Appointment } from "../../contexts/ClinicContext";
 import { getProcedimentos, ProcedimentoData } from "../../actions/procedures";
 import { getEstoque, EstoqueProdutoData, registrarBaixaAgendamento, getMovimentacoesPorAgendamento, sincronizarBaixaAgendamento } from "../../actions/inventory";
 
-const HOURS = Array.from({ length: 14 }, (_, i) => i + 8); // 08:00 to 21:00
+const HOURS = Array.from({ length: 16 }, (_, i) => i + 7); // 07:00 to 22:00
 
 function AgendamentosContent() {
   const searchParams = useSearchParams();
@@ -31,8 +31,10 @@ function AgendamentosContent() {
   const [estoque, setEstoque] = useState<EstoqueProdutoData[]>([]);
   const [dbClients, setDbClients] = useState<any[]>([]);
 
-  const { appointments, addAppointment, updateAppointment, deleteAppointment } = useClinic();
+  const { appointments, addAppointment, updateAppointment, deleteAppointment, refreshAppointments } = useClinic();
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [isSyncingGoogle, setIsSyncingGoogle] = useState(false);
+  const [syncSuccess, setSyncSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     patientName: "",
@@ -59,6 +61,19 @@ function AgendamentosContent() {
   }, [searchParams]);
 
   const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+
+  const handleSyncGoogle = async () => {
+    setIsSyncingGoogle(true);
+    try {
+      await refreshAppointments();
+      setSyncSuccess(true);
+      setTimeout(() => setSyncSuccess(false), 3000);
+    } catch (e) {
+      console.error("Sync error:", e);
+    } finally {
+      setIsSyncingGoogle(false);
+    }
+  };
 
   const handleAddAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,24 +187,26 @@ function AgendamentosContent() {
   };
 
   const getBlockStyle = (app: Appointment, dayAppointments: Appointment[], view: 'dia' | 'semana') => {
-    const [h, m] = app.startTime.split(':').map(Number);
-    const startHour = HOURS[0];
-    const top = (h - startHour) * 88 + (m * 1.46);
+    const [rawH, rawM] = (app.startTime || "09:00").split(':').map(Number);
+    const h = isNaN(rawH) ? 9 : rawH;
+    const m = isNaN(rawM) ? 0 : rawM;
+    const startHour = 7; // 07:00
+    const top = Math.max(0, (h - startHour) * 88 + (m * 1.46));
     const height = Math.max((app.duration || 60) * 1.46, 38);
     
     const startMins = h * 60 + m;
     const endMins = startMins + (app.duration || 60);
     
     const overlapping = dayAppointments.filter(other => {
-      const [oh, om] = other.startTime.split(':').map(Number);
-      const oStart = oh * 60 + om;
+      const [oh, om] = (other.startTime || "09:00").split(':').map(Number);
+      const oStart = (isNaN(oh) ? 9 : oh) * 60 + (isNaN(om) ? 0 : om);
       const oEnd = oStart + (other.duration || 60);
       return (oStart < endMins && oEnd > startMins);
     });
     
     overlapping.sort((a, b) => {
-       const aStart = parseInt(a.startTime.replace(':',''));
-       const bStart = parseInt(b.startTime.replace(':',''));
+       const aStart = parseInt((a.startTime || "09:00").replace(':',''));
+       const bStart = parseInt((b.startTime || "09:00").replace(':',''));
        if (aStart === bStart) return a.id.localeCompare(b.id);
        return aStart - bStart;
     });
@@ -234,31 +251,31 @@ function AgendamentosContent() {
   
   const weekDays = useMemo(() => {
     const d = new Date(currentDate);
-    const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1); 
-    d.setDate(diff);
-    return Array.from({ length: 6 }, (_, i) => {
-      const wDay = new Date(d);
-      wDay.setDate(d.getDate() + i);
+    const day = d.getDay(); // 0 is Sun, 1 is Mon, ... 6 is Sat
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+    const mondayDate = new Date(d.getFullYear(), d.getMonth(), diff);
+    return Array.from({ length: 7 }, (_, i) => {
+      const wDay = new Date(mondayDate);
+      wDay.setDate(mondayDate.getDate() + i);
       return wDay;
     });
   }, [currentDate]);
 
   const totalMonthAppointments = useMemo(() => {
     const currentMonthPrefix = currentDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }).slice(0, 7);
-    return appointments.filter(a => a.date.startsWith(currentMonthPrefix)).length;
+    return appointments.filter(a => (a.date || "").split('T')[0].startsWith(currentMonthPrefix)).length;
   }, [appointments, currentDate]);
 
   const filteredListAppointments = useMemo(() => {
     let list = [...appointments];
     
     if (listFilter === "hoje") {
-      list = list.filter(a => a.date === todayStr);
+      list = list.filter(a => (a.date || "").split('T')[0] === todayStr);
     } else if (listFilter === "semana") {
       const weekDates = weekDays.map(d => d.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }));
-      list = list.filter(a => weekDates.includes(a.date));
+      list = list.filter(a => weekDates.includes((a.date || "").split('T')[0]));
     } else if (listFilter === "futuros") {
-      list = list.filter(a => a.date >= todayStr);
+      list = list.filter(a => (a.date || "").split('T')[0] >= todayStr);
     }
 
     if (listSearch.trim()) {
@@ -270,7 +287,7 @@ function AgendamentosContent() {
       );
     }
 
-    return list.sort((a, b) => new Date(`${a.date}T${a.startTime}`).getTime() - new Date(`${b.date}T${b.startTime}`).getTime());
+    return list.sort((a, b) => new Date(`${(a.date || "").split('T')[0]}T${a.startTime}`).getTime() - new Date(`${(b.date || "").split('T')[0]}T${b.startTime}`).getTime());
   }, [appointments, listFilter, listSearch, todayStr, weekDays]);
 
   const openNewAppointmentModal = (defaultDate?: string) => {
@@ -308,13 +325,33 @@ function AgendamentosContent() {
           </p>
         </div>
         
-        <button 
-          onClick={() => openNewAppointmentModal()}
-          className="w-full sm:w-auto px-4 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-container to-primary-fixed text-on-primary-fixed text-sm font-medium hover:shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm"
-        >
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          Novo Agendamento
-        </button>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleSyncGoogle}
+            disabled={isSyncingGoogle}
+            className={`p-2.5 rounded-xl border transition-all flex items-center justify-center gap-1.5 text-xs font-medium shadow-xs ${
+              syncSuccess 
+                ? 'bg-tertiary/15 border-tertiary/30 text-tertiary' 
+                : 'bg-surface-container/60 hover:bg-surface-container border-outline-variant/30 text-on-surface-variant'
+            }`}
+            title="Sincronizar com Google Agenda"
+          >
+            <span className={`material-symbols-outlined text-[18px] ${isSyncingGoogle ? 'animate-spin text-primary' : ''}`}>
+              {syncSuccess ? 'check_circle' : 'sync'}
+            </span>
+            <span className="hidden md:inline">
+              {isSyncingGoogle ? 'Sincronizando...' : syncSuccess ? 'Sincronizado!' : 'Sincronizar Google'}
+            </span>
+          </button>
+
+          <button 
+            onClick={() => openNewAppointmentModal()}
+            className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-container to-primary-fixed text-on-primary-fixed text-sm font-medium hover:shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Novo Agendamento
+          </button>
+        </div>
       </div>
 
       {/* Main Calendar Card */}
@@ -400,7 +437,7 @@ function AgendamentosContent() {
                     {currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
                   </h3>
                   <span className="text-[11px] text-on-surface-variant bg-surface-container/70 px-2 py-0.5 rounded-md">
-                    {appointments.filter(app => app.date === currentDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })).length} agendamentos
+                    {appointments.filter(app => (app.date || "").split('T')[0] === currentDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })).length} agendamentos
                   </span>
                 </div>
 
@@ -412,7 +449,7 @@ function AgendamentosContent() {
                   ))}
                   
                   {appointments
-                    .filter(app => app.date === currentDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }))
+                    .filter(app => (app.date || "").split('T')[0] === currentDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }))
                     .map((app, _, arr) => (
                     <div 
                       key={app.id}
@@ -460,7 +497,7 @@ function AgendamentosContent() {
                 {weekDays.map((day, idx) => {
                   const dayStr = day.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
                   const isSelected = selectedWeekDayStr === dayStr;
-                  const dayAppsCount = appointments.filter(a => a.date === dayStr).length;
+                  const dayAppsCount = appointments.filter(a => (a.date || "").split('T')[0] === dayStr).length;
                   return (
                     <button
                       key={idx}
@@ -532,7 +569,7 @@ function AgendamentosContent() {
                           ))}
 
                           {appointments
-                            .filter(app => app.date === dayStr)
+                            .filter(app => (app.date || "").split('T')[0] === dayStr)
                             .map((app, _, arr) => (
                             <div 
                               key={app.id}
@@ -601,7 +638,7 @@ function AgendamentosContent() {
                     const dateStr = dateObj.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
                     const isToday = dateStr === todayStr;
                     const isSelected = dateStr === selectedMonthDate;
-                    const dayApps = appointments.filter(app => app.date === dateStr);
+                    const dayApps = appointments.filter(app => (app.date || "").split('T')[0] === dateStr);
                     
                     cells.push(
                       <div 
@@ -668,7 +705,7 @@ function AgendamentosContent() {
                       {new Date(selectedMonthDate + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })}
                     </h3>
                     <span className="text-[11px] text-on-surface-variant font-medium">
-                      ({appointments.filter(a => a.date === selectedMonthDate).length})
+                      ({appointments.filter(a => (a.date || "").split('T')[0] === selectedMonthDate).length})
                     </span>
                   </div>
 
@@ -682,7 +719,7 @@ function AgendamentosContent() {
                 </div>
 
                 <div className="space-y-1.5 sm:space-y-2 max-h-36 sm:max-h-48 overflow-y-auto pr-1">
-                  {appointments.filter(a => a.date === selectedMonthDate).length === 0 ? (
+                  {appointments.filter(a => (a.date || "").split('T')[0] === selectedMonthDate).length === 0 ? (
                     <div className="text-center py-3 bg-surface-container/30 rounded-xl border border-dashed border-outline-variant/30">
                       <p className="text-xs text-on-surface-variant">Nenhum agendamento para esta data.</p>
                       <button 
@@ -695,7 +732,7 @@ function AgendamentosContent() {
                     </div>
                   ) : (
                     appointments
-                      .filter(a => a.date === selectedMonthDate)
+                      .filter(a => (a.date || "").split('T')[0] === selectedMonthDate)
                       .sort((a, b) => a.startTime.localeCompare(b.startTime))
                       .map(app => (
                         <div 

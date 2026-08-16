@@ -6,6 +6,10 @@ import { syncEventToGoogle, deleteEventFromGoogle, fetchExternalGoogleEvents } f
 import { sendWhatsAppMessage } from '../../lib/whatsapp';
 import { reverterBaixaAgendamento } from './inventory';
 
+export async function syncGoogleCalendarAction() {
+  return await getAppointments();
+}
+
 export async function getAppointments() {
   try {
     const agendamentos = await prisma.agendamento.findMany({
@@ -19,7 +23,7 @@ export async function getAppointments() {
       patientName: a.cliente.nome,
       patientPhone: a.cliente.telefone || "",
       service: a.service,
-      date: a.date,
+      date: a.date ? a.date.split('T')[0] : "",
       startTime: a.startTime,
       duration: a.duration,
       googleEventId: a.googleEventId,
@@ -30,103 +34,135 @@ export async function getAppointments() {
     }));
 
     try {
-    const today = new Date();
-    // Fetch from 1 month ago to 3 months in the future
-    const timeMin = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString();
-    const timeMax = new Date(today.getFullYear(), today.getMonth() + 3, 0).toISOString();
-    
-    const googleEvents = await fetchExternalGoogleEvents(timeMin, timeMax);
-    
-    // Filter out events that already exist in our DB
-    const localGoogleIds = new Set(localAppointments.map((a: any) => a.googleEventId).filter(Boolean));
-
-    // Delete local events that were removed from Google Calendar
-    const timeMinDate = new Date(timeMin).toISOString().split('T')[0];
-    const timeMaxDate = new Date(timeMax).toISOString().split('T')[0];
-    const remoteGoogleIds = new Set(googleEvents.map((e: any) => e.googleEventId || e.id).filter(Boolean));
-    
-    const deletedIds = new Set<string>();
-    for (const local of localAppointments) {
-      if (local.googleEventId && local.date >= timeMinDate && local.date <= timeMaxDate) {
-        if (!remoteGoogleIds.has(local.googleEventId)) {
-          await prisma.agendamento.delete({ where: { id: local.id } });
-          deletedIds.add(local.id);
+      const today = new Date();
+      // Fetch from 2 months ago to 6 months in the future
+      const timeMin = new Date(today.getFullYear(), today.getMonth() - 2, 1).toISOString();
+      const timeMax = new Date(today.getFullYear(), today.getMonth() + 6, 0).toISOString();
+      
+      const googleEvents = await fetchExternalGoogleEvents(timeMin, timeMax);
+      
+      const timeMinDate = new Date(timeMin).toISOString().split('T')[0];
+      const timeMaxDate = new Date(timeMax).toISOString().split('T')[0];
+      const remoteGoogleIds = new Set(googleEvents.map((e: any) => e.googleEventId || e.id).filter(Boolean));
+      
+      // 1. Delete local events that were explicitly removed from Google Calendar
+      const deletedIds = new Set<string>();
+      for (const local of localAppointments) {
+        if (local.googleEventId && local.date >= timeMinDate && local.date <= timeMaxDate) {
+          if (!remoteGoogleIds.has(local.googleEventId)) {
+            await prisma.agendamento.delete({ where: { id: local.id } });
+            deletedIds.add(local.id);
+          }
         }
       }
-    }
-    
-    const validLocalAppointments = localAppointments.filter((a: any) => !deletedIds.has(a.id));
-
-    const newAgendamentos = [];
-
-    // ONLY import NEW events that have an asterisk (*) in their title
-    const eventsToImport = googleEvents.filter((e: any) => e.summary && e.summary.includes('*') && !localGoogleIds.has(e.googleEventId || e.id));
-
-    for (const e of eventsToImport) {
-      const startInput = e.start;
-      const endInput = e.end;
-      if (!startInput || !endInput) continue;
-
-      const startDate = new Date(startInput);
-      const endDate = new Date(endInput);
       
-      const dateStr = startDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
-      const startTimeStr = startDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
-      const duration = Math.round((endDate.getTime() - startDate.getTime()) / 60000);
+      const activeLocalAppointments = localAppointments.filter((a: any) => !deletedIds.has(a.id));
+      const newAgendamentos: any[] = [];
 
-      // Simple heuristic: "Service - Patient Name"
-      let rawTitle = (e.summary || "Paciente do Google").replace(/\*/g, '').trim();
-      let patientName = rawTitle;
-      let service = "Google Agenda";
-      
-      if (rawTitle.includes(' - ')) {
-        const parts = rawTitle.split(' - ');
-        service = parts[0].trim();
-        patientName = parts.slice(1).join(' - ').trim();
+      // 2. Process all Google Events: Update existing OR Insert new
+      for (const e of googleEvents) {
+        const gEventId = (e as any).googleEventId || (e as any).id;
+        if (!gEventId || !e.start || !e.end) continue;
+
+        const isAllDay = !e.start.includes('T');
+        let dateStr: string;
+        let startTimeStr: string;
+        let duration = 60;
+
+        if (isAllDay) {
+          dateStr = e.start.split('T')[0];
+          startTimeStr = "09:00";
+          duration = 60;
+        } else {
+          const startDate = new Date(e.start);
+          const endDate = new Date(e.end);
+          dateStr = startDate.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+          startTimeStr = startDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
+          duration = Math.max(Math.round((endDate.getTime() - startDate.getTime()) / 60000), 15);
+        }
+
+        // Clean up title: extract service and patient name
+        let rawTitle = (e.summary || "Agendamento Google").replace(/\*/g, '').trim();
+        let patientName = rawTitle;
+        let service = "Google Agenda";
+        
+        if (rawTitle.includes(' - ')) {
+          const parts = rawTitle.split(' - ');
+          service = parts[0].trim();
+          patientName = parts.slice(1).join(' - ').trim();
+        }
+
+        // Check if event already exists in local DB
+        const existingLocal = activeLocalAppointments.find((a: any) => a.googleEventId === gEventId);
+
+        if (existingLocal) {
+          // If date, time, duration or service was edited in Google Calendar -> UPDATE local DB!
+          const dateChanged = existingLocal.date !== dateStr;
+          const timeChanged = existingLocal.startTime !== startTimeStr;
+          const durationChanged = existingLocal.duration !== duration;
+          const serviceChanged = service !== "Google Agenda" && existingLocal.service !== service;
+
+          if (dateChanged || timeChanged || durationChanged || serviceChanged) {
+            await prisma.agendamento.update({
+              where: { id: existingLocal.id },
+              data: {
+                date: dateStr,
+                startTime: startTimeStr,
+                duration: duration,
+                ...(serviceChanged ? { service } : {})
+              }
+            });
+
+            existingLocal.date = dateStr;
+            existingLocal.startTime = startTimeStr;
+            existingLocal.duration = duration;
+            if (serviceChanged) existingLocal.service = service;
+          }
+        } else {
+          // New event created directly on Google Calendar -> Create in local DB
+          let cliente = await prisma.cliente.findFirst({ where: { nome: patientName } });
+          if (!cliente) {
+            cliente = await prisma.cliente.create({ data: { nome: patientName } });
+          }
+
+          try {
+            const ag = await prisma.agendamento.create({
+              data: {
+                date: dateStr,
+                startTime: startTimeStr,
+                duration: duration,
+                service: service,
+                clienteId: cliente.id,
+                googleEventId: gEventId,
+              },
+              include: { cliente: true }
+            });
+
+            newAgendamentos.push({
+              id: ag.id,
+              patientName: ag.cliente.nome,
+              patientPhone: ag.cliente.telefone || "",
+              service: ag.service,
+              date: ag.date,
+              startTime: ag.startTime,
+              duration: ag.duration,
+              googleEventId: ag.googleEventId,
+              clienteId: ag.clienteId,
+              valor: ag.valor,
+              formaPagamento: ag.formaPagamento,
+              numeroParcelas: ag.numeroParcelas,
+            });
+          } catch (insertErr) {
+            console.error("Failed to insert google event", e.summary, insertErr);
+          }
+        }
       }
 
-      let cliente = await prisma.cliente.findFirst({ where: { nome: patientName } });
-      if (!cliente) {
-        cliente = await prisma.cliente.create({ data: { nome: patientName } });
-      }
-
-      try {
-        const ag = await prisma.agendamento.create({
-          data: {
-            date: dateStr,
-            startTime: startTimeStr,
-            duration: duration || 60,
-            service: service,
-            clienteId: cliente.id,
-            googleEventId: (e as any).googleEventId || (e as any).id,
-          },
-          include: { cliente: true }
-        });
-
-        newAgendamentos.push({
-          id: ag.id,
-          patientName: ag.cliente.nome,
-          patientPhone: ag.cliente.telefone || "",
-          service: ag.service,
-          date: ag.date,
-          startTime: ag.startTime,
-          duration: ag.duration,
-          googleEventId: ag.googleEventId,
-          clienteId: ag.clienteId,
-          valor: ag.valor,
-          formaPagamento: ag.formaPagamento,
-          numeroParcelas: ag.numeroParcelas,
-        });
-      } catch (insertErr) {
-        console.error("Failed to insert google event", e.summary, insertErr);
-      }
+      return [...activeLocalAppointments, ...newAgendamentos].sort((a, b) => new Date(`${a.date}T${a.startTime}`).getTime() - new Date(`${b.date}T${b.startTime}`).getTime());
+    } catch (err) {
+      console.error("Failed to merge external Google events", err);
+      return localAppointments;
     }
-
-    return [...validLocalAppointments, ...newAgendamentos].sort((a, b) => new Date(`${a.date}T${a.startTime}`).getTime() - new Date(`${b.date}T${b.startTime}`).getTime());
-  } catch (err) {
-    console.error("Failed to merge external Google events", err);
-    return localAppointments;
-  }
   } catch (outerErr) {
     console.error("Failed to fetch appointments from DB:", outerErr);
     return [];
