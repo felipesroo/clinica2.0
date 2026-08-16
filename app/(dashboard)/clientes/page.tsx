@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getAllClientsList, createClientAction, deleteClientAction } from "../../actions/client";
+import { getAllClientsList, createClientAction, deleteClientAction, mergeDuplicateClientsAction } from "../../actions/client";
 
 interface Treatment {
   name: string;
@@ -32,6 +32,7 @@ export default function ClientesPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterVip, setFilterVip] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMerging, setIsMerging] = useState(false);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,6 +50,28 @@ export default function ClientesPage() {
     }
     setIsLoading(false);
   }
+
+  const handleMergeDuplicates = async () => {
+    setIsMerging(true);
+    try {
+      const res = await mergeDuplicateClientsAction();
+      if (res.success) {
+        if (res.duplicatesRemoved && res.duplicatesRemoved > 0) {
+          alert(`✅ Sucesso! ${res.duplicatesRemoved} cadastro(s) duplicado(s) foram unificados.`);
+        } else {
+          alert("✅ Nenhum cadastro duplicado encontrado no sistema.");
+        }
+        await load();
+      } else {
+        alert("Erro ao mesclar duplicados: " + res.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao executar unificação de cadastros");
+    } finally {
+      setIsMerging(false);
+    }
+  };
 
   useEffect(() => {
     load();
@@ -118,14 +141,21 @@ export default function ClientesPage() {
             Gerencie e revise perfis de pacientes.
           </p>
         </div>
-        <div className="flex gap-4">
-          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary shadow-sm rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
-            <span className="material-symbols-outlined text-[20px]">add</span>
-            Novo Paciente
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <button 
+            onClick={handleMergeDuplicates} 
+            disabled={isMerging}
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-surface-container-lowest/80 backdrop-blur-sm border border-outline-variant/30 text-on-surface hover:bg-surface-container shadow-xs rounded-xl text-xs sm:text-sm font-medium transition-colors disabled:opacity-50"
+            title="Verificar e unificar cadastros duplicados"
+          >
+            <span className={`material-symbols-outlined text-[18px] text-tertiary ${isMerging ? 'animate-spin' : ''}`}>
+              {isMerging ? 'hourglass_top' : 'auto_fix_high'}
+            </span>
+            <span>{isMerging ? 'Unificando...' : 'Unificar Duplicados'}</span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest/60 backdrop-blur-sm border border-white/40 shadow-sm rounded-xl text-primary text-sm font-medium hover:bg-surface-container/60 transition-colors">
-            <span className="material-symbols-outlined text-[20px]">filter_list</span>
-            Filtrar
+          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary shadow-sm rounded-xl text-xs sm:text-sm font-medium hover:bg-primary/90 transition-colors">
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Novo Paciente
           </button>
         </div>
       </div>

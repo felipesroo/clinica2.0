@@ -146,21 +146,15 @@ async function getAvailableSlots(date: string) {
   return { date, available_slots: available };
 }
 
+import { findOrCreateClient } from '@/app/actions/client';
+
 async function bookAppointment(args: any, phone: string) {
   try {
-    // 1. Find or create patient
-    let paciente = await prisma.cliente.findFirst({
-      where: { telefone: phone }
+    // 1. Find or create patient cleanly
+    const paciente = await findOrCreateClient({
+      nome: args.patientName,
+      telefone: phone,
     });
-
-    if (!paciente) {
-      paciente = await prisma.cliente.create({
-        data: {
-          nome: args.patientName,
-          telefone: phone,
-        }
-      });
-    }
 
     // 2. Create appointment
     const appointment = await prisma.agendamento.create({

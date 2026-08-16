@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   '/login',
   '/api/auth',
   '/api/seed',
+  '/api/admin',
   '/api/webhooks',
   '/api/cron'
 ];

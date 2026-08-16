@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from '../../lib/prisma';
+import { findOrCreateClient } from './client';
 
 import { syncEventToGoogle, deleteEventFromGoogle, fetchExternalGoogleEvents } from '../../lib/googleCalendar';
 import { sendWhatsAppMessage } from '../../lib/whatsapp';
@@ -120,10 +121,7 @@ export async function getAppointments() {
           }
         } else {
           // New event created directly on Google Calendar -> Create in local DB
-          let cliente = await prisma.cliente.findFirst({ where: { nome: patientName } });
-          if (!cliente) {
-            cliente = await prisma.cliente.create({ data: { nome: patientName } });
-          }
+          const cliente = await findOrCreateClient({ nome: patientName });
 
           try {
             const ag = await prisma.agendamento.create({
@@ -180,25 +178,11 @@ export async function createAppointment(data: {
   formaPagamento?: string;
   numeroParcelas?: number;
 }) {
-  // Try to find the client first, if not create one
-  let cliente = await prisma.cliente.findFirst({
-    where: { nome: data.patientName }
+  // Find or create client using unified intelligent deduplication
+  const cliente = await findOrCreateClient({
+    nome: data.patientName,
+    telefone: data.patientPhone,
   });
-
-  if (!cliente) {
-    cliente = await prisma.cliente.create({
-      data: {
-        nome: data.patientName,
-        telefone: data.patientPhone || null,
-      }
-    });
-  } else if (data.patientPhone && data.patientPhone !== cliente.telefone) {
-    // Update phone if it was changed in the form
-    cliente = await prisma.cliente.update({
-      where: { id: cliente.id },
-      data: { telefone: data.patientPhone }
-    });
-  }
 
   const agendamento = await prisma.agendamento.create({
     data: {
@@ -268,24 +252,10 @@ export async function updateAppointment(data: {
   formaPagamento?: string;
   numeroParcelas?: number;
 }) {
-  let cliente = await prisma.cliente.findFirst({
-    where: { nome: data.patientName }
+  const cliente = await findOrCreateClient({
+    nome: data.patientName,
+    telefone: data.patientPhone,
   });
-
-  if (!cliente) {
-    cliente = await prisma.cliente.create({
-      data: {
-        nome: data.patientName,
-        telefone: data.patientPhone || null,
-      }
-    });
-  } else if (data.patientPhone && data.patientPhone !== cliente.telefone) {
-    // Update phone if it was changed in the form
-    cliente = await prisma.cliente.update({
-      where: { id: cliente.id },
-      data: { telefone: data.patientPhone }
-    });
-  }
 
   const existing = await prisma.agendamento.findUnique({ where: { id: data.id } });
 
