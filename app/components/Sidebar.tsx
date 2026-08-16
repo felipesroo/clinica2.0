@@ -78,15 +78,29 @@ export default function Sidebar({ isOpen = false, onClose = () => {} }: { isOpen
         })}
       </ul>
 
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-4 space-y-2">
         <Link
           href="/agendamentos"
           onClick={onClose}
           className="w-full py-3 px-4 rounded-xl text-xs bg-primary text-on-primary hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2 font-medium uppercase tracking-wider shadow-sm"
         >
-          <span className="material-symbols-outlined">add</span>
+          <span className="material-symbols-outlined text-[18px]">add</span>
           <span>Novo Agendamento</span>
         </Link>
+
+        <form action={async () => {
+          const { logoutUser } = await import('../actions/authActions');
+          await logoutUser();
+        }}>
+          <button
+            type="submit"
+            className="w-full py-2.5 px-4 rounded-xl text-xs bg-surface-container-high/60 text-on-surface-variant hover:bg-error/20 hover:text-error transition-colors flex items-center justify-center space-x-2 font-medium cursor-pointer border border-white/5"
+            title="Sair da Conta"
+          >
+            <span className="material-symbols-outlined text-[18px]">logout</span>
+            <span>Sair do Sistema</span>
+          </button>
+        </form>
       </div>
     </nav>
     </>

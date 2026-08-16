@@ -1,7 +1,18 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
+import { getSession } from '../../../lib/auth';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const secretParam = searchParams.get('secret');
+  const expectedSecret = process.env.SEED_SECRET || process.env.JWT_SECRET;
+
+  const session = await getSession();
+
+  // Allow execution if caller provides matching secret OR has an active admin session
+  if (!session && secretParam !== expectedSecret) {
+    return NextResponse.json({ error: 'Acesso não autorizado ao endpoint de seed.' }, { status: 401 });
+  }
   try {
     const ddlStatements = [
       `CREATE TABLE IF NOT EXISTS "Cliente" (
@@ -112,6 +123,19 @@ export async function GET() {
           "aiAgentActive" BOOLEAN NOT NULL DEFAULT false,
           "aiAutoSchedule" BOOLEAN NOT NULL DEFAULT false,
           CONSTRAINT "Configuracao_pkey" PRIMARY KEY ("id")
+      );`,
+      `CREATE TABLE IF NOT EXISTS "Usuario" (
+          "id" TEXT NOT NULL,
+          "nome" TEXT NOT NULL,
+          "email" TEXT NOT NULL,
+          "senhaHash" TEXT NOT NULL,
+          "role" TEXT NOT NULL DEFAULT 'ADMIN',
+          "fotoUrl" TEXT,
+          "googleId" TEXT,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id"),
+          CONSTRAINT "Usuario_email_key" UNIQUE ("email")
       );`
     ];
 
@@ -122,6 +146,10 @@ export async function GET() {
         console.error("DDL Exec error:", ddlErr?.message);
       }
     }
+
+    // Seed default admin users
+    const { ensureDefaultAdminUser } = await import('../../actions/authActions');
+    await ensureDefaultAdminUser();
 
     // 1. Configuracao
     const config = await prisma.configuracao.upsert({

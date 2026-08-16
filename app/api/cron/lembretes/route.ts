@@ -6,7 +6,8 @@ import { sendWhatsAppMessage } from '../../../../lib/whatsapp';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  if (process.env.CRON_SECRET && secret !== process.env.CRON_SECRET) {
+  const expectedSecret = process.env.CRON_SECRET || 'aura-cron-secret-2026';
+  if (secret !== expectedSecret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
