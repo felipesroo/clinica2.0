@@ -12,14 +12,19 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const urlError = searchParams.get('error');
   const [showPassword, setShowPassword] = useState(false);
-  const [logoUrl, setLogoUrl] = useState<string>(DEFAULT_LOGO);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [nomeFantasia, setNomeFantasia] = useState<string>("Estética Avançada");
+  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
 
   useEffect(() => {
     getSettings().then(settings => {
-      if (settings.logoUrl) setLogoUrl(settings.logoUrl);
+      setLogoUrl(settings.logoUrl || DEFAULT_LOGO);
       if (settings.nomeFantasia) setNomeFantasia(settings.nomeFantasia);
-    }).catch(console.error);
+    }).catch(() => {
+      setLogoUrl(DEFAULT_LOGO);
+    }).finally(() => {
+      setIsLogoLoaded(true);
+    });
   }, []);
 
   const displayError = state?.error || (urlError ? decodeURIComponent(urlError) : null);
@@ -33,12 +38,18 @@ function LoginContent() {
       <div className="relative w-full max-w-md bg-surface-container-lowest/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl z-10">
         {/* Header Logo & Title */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/40 shadow-lg mb-4 bg-black/40 flex items-center justify-center">
-            <img
-              src={logoUrl}
-              alt={nomeFantasia}
-              className="w-full h-full object-cover"
-            />
+          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/40 shadow-lg mb-4 bg-black/40 flex items-center justify-center relative">
+            {!isLogoLoaded ? (
+              <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#A08C98] animate-spin text-xl">progress_activity</span>
+              </div>
+            ) : (
+              <img
+                src={logoUrl || DEFAULT_LOGO}
+                alt={nomeFantasia}
+                className="w-full h-full object-cover animate-in fade-in duration-300"
+              />
+            )}
           </div>
           <h1 className="font-serif text-2xl md:text-3xl font-semibold text-[#F5E6EC] tracking-wide">
             {nomeFantasia}
