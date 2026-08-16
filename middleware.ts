@@ -14,6 +14,14 @@ const PUBLIC_PATHS = [
   '/api/cron'
 ];
 
+function getPublicBaseUrl(request: NextRequest): string {
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://agenda.drajordanefaria.com';
+  }
+  const origin = request.nextUrl.origin;
+  return origin.includes('0.0.0.0') ? 'http://localhost:3000' : origin;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -27,11 +35,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const baseUrl = getPublicBaseUrl(request);
+
   // Check session cookie
   const token = request.cookies.get('aura_session')?.value;
 
   if (!token) {
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/login', baseUrl);
     loginUrl.searchParams.set('from', pathname);
     return NextResponse.redirect(loginUrl);
   }
@@ -39,7 +49,7 @@ export async function middleware(request: NextRequest) {
   try {
     return NextResponse.next();
   } catch (err) {
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/login', baseUrl);
     loginUrl.searchParams.set('from', pathname);
     const response = NextResponse.redirect(loginUrl);
     response.cookies.delete('aura_session');

@@ -8,12 +8,13 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
 
   const isProd = process.env.NODE_ENV === 'production';
-  const redirectUri = isProd
-    ? 'https://agenda.drajordanefaria.com/api/auth/google/login/callback'
-    : 'http://localhost:3000/api/auth/google/login/callback';
+  const publicBaseUrl = isProd
+    ? 'https://agenda.drajordanefaria.com'
+    : 'http://localhost:3000';
+  const redirectUri = `${publicBaseUrl}/api/auth/google/login/callback`;
 
   if (!code) {
-    return NextResponse.redirect(new URL('/login?error=google_denied', request.url));
+    return NextResponse.redirect(new URL('/login?error=google_denied', publicBaseUrl));
   }
 
   try {
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
     const { data: googleUser } = await oauth2.userinfo.get();
 
     if (!googleUser.email) {
-      return NextResponse.redirect(new URL('/login?error=no_email', request.url));
+      return NextResponse.redirect(new URL('/login?error=no_email', publicBaseUrl));
     }
 
     const userEmail = googleUser.email.toLowerCase();
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
       const allowedList = allowedEnv.split(',').map(e => e.trim().toLowerCase());
       if (!allowedList.includes(userEmail)) {
         return NextResponse.redirect(
-          new URL(`/login?error=${encodeURIComponent(`O e-mail (${userEmail}) não possui autorização de acesso.`)}`, request.url)
+          new URL(`/login?error=${encodeURIComponent(`O e-mail (${userEmail}) não possui autorização de acesso.`)}`, publicBaseUrl)
         );
       }
     }
@@ -90,9 +91,9 @@ export async function GET(request: Request) {
       fotoUrl: user.fotoUrl
     });
 
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/', publicBaseUrl));
   } catch (err: any) {
     console.error('Google login callback error details:', err?.stack || err);
-    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(err?.message || 'google_failed')}`, request.url));
+    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(err?.message || 'google_failed')}`, publicBaseUrl));
   }
 }
