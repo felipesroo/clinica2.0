@@ -10,9 +10,7 @@ export async function GET(request: Request) {
   const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'localhost:3000';
   const isLocal = !host || host.includes('localhost') || host.includes('0.0.0.0') || host.includes('127.0.0.1');
   const protocol = isLocal ? 'http' : (request.headers.get('x-forwarded-proto') || 'https');
-  const redirectUri = (process.env.GOOGLE_REDIRECT_URI && !isLocal)
-    ? process.env.GOOGLE_REDIRECT_URI
-    : `${protocol}://${host}/api/auth/google/login/callback`;
+  const redirectUri = `${protocol}://${host}/api/auth/google/login/callback`;
 
   if (!code) {
     return NextResponse.redirect(new URL('/login?error=google_denied', request.url));
