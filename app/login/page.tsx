@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { loginUser } from '../actions/authActions';
 import { getSettings } from '../actions/settings';
 
-const DEFAULT_LOGO = "https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA";
+const DEFAULT_LOGO = "/logo.png";
 
 function LoginContent() {
   const [state, formAction, isPending] = useActionState(loginUser, null);

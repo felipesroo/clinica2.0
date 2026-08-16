@@ -49,7 +49,7 @@ model Configuracao {
   whatsapp            String  @default("(11) 99999-9999")
   cep                 String  @default("01415-000")
   endereco            String  @default("Rua Oscar Freire, 1000")
-  logoUrl             String  @default("https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA")
+  logoUrl             String  @default("/logo.png")
   bairro              String  @default("Jardins")
   cidade              String  @default("São Paulo")
   estado              String  @default("SP")

@@ -61,7 +61,7 @@ export async function getSettings(): Promise<ClinicSettings> {
     cidade: settings.cidade,
     estado: settings.estado,
     instagram: settings.instagram,
-    logoUrl: settings.logoUrl,
+    logoUrl: (!settings.logoUrl || settings.logoUrl.includes('lh3.googleusercontent.com')) ? '/logo.png' : settings.logoUrl,
     googleRefreshToken: settings.googleRefreshToken,
     wahaUrl: settings.wahaUrl,
     wahaSessionName: settings.wahaSessionName,
