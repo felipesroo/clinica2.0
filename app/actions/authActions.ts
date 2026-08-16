@@ -92,28 +92,41 @@ export async function getCurrentUser() {
 }
 
 export async function ensureDefaultAdminUser() {
-  const adminEmail = (process.env.ADMIN_EMAIL || 'jordaneferreirafaria@gmail.com').trim().toLowerCase();
+  const rawAdminEmails = process.env.ADMIN_EMAIL || 'jordane_ferreira_faria@hotmail.com,jordaneferreirafaria@gmail.com,felipesro06@gmail.com';
+  const allowedGoogleEmails = process.env.ALLOWED_GOOGLE_EMAILS || '';
+
+  const emailsToSetup = Array.from(
+    new Set(
+      `${rawAdminEmails},${allowedGoogleEmails}`
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean)
+    )
+  );
+
   const rawPassword = process.env.ADMIN_PASSWORD || 'admin123';
   const senhaHash = await hashPassword(rawPassword);
 
-  const existingUser = await prisma.usuario.findUnique({
-    where: { email: adminEmail }
-  });
+  for (const email of emailsToSetup) {
+    const existingUser = await prisma.usuario.findUnique({
+      where: { email }
+    });
 
-  if (!existingUser) {
-    await prisma.usuario.create({
-      data: {
-        nome: 'Dra. Jordane Ferreira Faria',
-        email: adminEmail,
-        senhaHash,
-        role: 'ADMIN',
-        fotoUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA'
-      }
-    });
-  } else {
-    await prisma.usuario.update({
-      where: { id: existingUser.id },
-      data: { senhaHash }
-    });
+    if (!existingUser) {
+      await prisma.usuario.create({
+        data: {
+          nome: email.includes('jordane') ? 'Dra. Jordane Ferreira Faria' : 'Administrador',
+          email,
+          senhaHash,
+          role: 'ADMIN',
+          fotoUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA'
+        }
+      });
+    } else {
+      await prisma.usuario.update({
+        where: { id: existingUser.id },
+        data: { senhaHash }
+      });
+    }
   }
 }
