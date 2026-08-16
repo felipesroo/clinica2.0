@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { loginUser } from '../actions/authActions';
 import { getSettings } from '../actions/settings';
 
@@ -8,9 +9,11 @@ const DEFAULT_LOGO = "https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJ
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get('error');
   const [showPassword, setShowPassword] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string>(DEFAULT_LOGO);
-  const [nomeFantasia, setNomeFantasia] = useState<string>("Dra. Jordane Ferreira Faria");
+  const [nomeFantasia, setNomeFantasia] = useState<string>("Estética Avançada");
 
   useEffect(() => {
     getSettings().then(settings => {
@@ -18,6 +21,8 @@ export default function LoginPage() {
       if (settings.nomeFantasia) setNomeFantasia(settings.nomeFantasia);
     }).catch(console.error);
   }, []);
+
+  const displayError = state?.error || (urlError ? decodeURIComponent(urlError) : null);
 
   return (
     <div className="min-h-screen w-full bg-[#121014] text-[#E8E0E5] flex items-center justify-center p-4 relative overflow-hidden font-sans">
@@ -44,9 +49,9 @@ export default function LoginPage() {
         </div>
 
         {/* Error Notification */}
-        {state?.error && (
+        {displayError && (
           <div className="mb-6 p-3 rounded-xl bg-error/20 border border-error/40 text-error text-xs font-medium text-center backdrop-blur-sm animate-in fade-in duration-150">
-            {state.error}
+            {displayError}
           </div>
         )}
 
