@@ -122,6 +122,16 @@ export default function PerfilClientePage() {
   const [editingRecordId, setEditingRecordId] = useState<string | null>(null);
   const [editingRecordTitle, setEditingRecordTitle] = useState("");
   const [editingRecordText, setEditingRecordText] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
+
+  const downloadPhoto = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (isLoading) {
     return <div className="p-8 text-center text-on-surface-variant">Carregando perfil...</div>;
@@ -754,13 +764,28 @@ export default function PerfilClientePage() {
                   <div key={photo.id} className="aspect-square rounded-lg overflow-hidden bg-surface-container border border-outline-variant/20 relative group">
                     <img
                       alt={photo.tipo}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover cursor-pointer"
                       src={photo.url}
+                      onClick={() => setSelectedPhoto(photo)}
                     />
-                    <div className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
+                    <div className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm font-medium">
                       {photo.tipo}
                     </div>
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
+                      <button 
+                        onClick={() => setSelectedPhoto(photo)}
+                        className="bg-white/90 text-on-surface p-2 rounded-full hover:bg-white transition-colors shadow-md"
+                        title="Expandir Foto"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">zoom_in</span>
+                      </button>
+                      <button 
+                        onClick={() => downloadPhoto(photo.url, `foto_evolucao_${photo.tipo.toLowerCase()}_${(patientData?.nome || 'paciente').replace(/\s+/g, '_')}.jpg`)}
+                        className="bg-primary text-white p-2 rounded-full hover:bg-primary/80 transition-colors shadow-md"
+                        title="Baixar Foto"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">download</span>
+                      </button>
                       <button 
                         onClick={async () => {
                           if (confirm("Excluir esta foto?")) {
@@ -769,7 +794,7 @@ export default function PerfilClientePage() {
                             setGalleryPhotos(photos);
                           }
                         }}
-                        className="bg-error text-white p-2 rounded-full hover:bg-error/80 transition-colors"
+                        className="bg-error text-white p-2 rounded-full hover:bg-error/80 transition-colors shadow-md"
                         title="Excluir"
                       >
                         <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -802,6 +827,55 @@ export default function PerfilClientePage() {
                   }} />
                 </label>
               </div>
+
+              {/* Modal de Expansão e Download da Foto */}
+              {selectedPhoto && (
+                <div 
+                  className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
+                  onClick={() => setSelectedPhoto(null)}
+                >
+                  <div 
+                    className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center bg-surface-container-lowest/95 border border-white/20 rounded-2xl p-4 shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="w-full flex items-center justify-between mb-3 px-2">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-primary/20 text-primary text-xs font-semibold px-3 py-1 rounded-full border border-primary/30">
+                          Foto: {selectedPhoto.tipo}
+                        </span>
+                        <span className="text-xs text-on-surface-variant font-medium">
+                          {patientData?.nome}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => downloadPhoto(selectedPhoto.url, `foto_evolucao_${selectedPhoto.tipo.toLowerCase()}_${(patientData?.nome || 'paciente').replace(/\s+/g, '_')}.jpg`)}
+                          className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-3.5 py-1.5 rounded-lg hover:bg-primary/90 transition-colors shadow-sm cursor-pointer"
+                          title="Baixar Foto"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">download</span>
+                          Baixar Imagem
+                        </button>
+                        <button
+                          onClick={() => setSelectedPhoto(null)}
+                          className="bg-surface-container-high text-on-surface-variant p-1.5 rounded-full hover:bg-surface-container-highest transition-colors cursor-pointer"
+                          title="Fechar"
+                        >
+                          <span className="material-symbols-outlined text-[20px]">close</span>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="w-full flex-1 flex items-center justify-center overflow-hidden rounded-xl bg-black/40 p-2">
+                      <img
+                        src={selectedPhoto.url}
+                        alt={selectedPhoto.tipo}
+                        className="max-h-[75vh] max-w-full object-contain rounded-lg shadow-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
