@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Dra. Jordane Faria - Estética Avançada',
-    short_name: 'Dra. Jordane',
+    name: 'Dra. Jordane (Agenda)',
+    short_name: 'Dra. Jordane (Agenda)',
     description: 'Sistema de Gestão e Agendamento Clínico - Dra. Jordane Ferreira Faria',
     start_url: '/',
     display: 'standalone',

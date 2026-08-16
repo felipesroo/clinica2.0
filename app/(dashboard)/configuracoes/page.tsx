@@ -933,7 +933,7 @@ export default function ConfiguracoesPage() {
                 PWA Habilitado &amp; Pronto para Instalação
               </div>
               <h2 className="font-serif text-2xl text-primary font-bold">
-                {settings?.nomeFantasia || "Dra. Jordane Ferreira Faria"}
+                Dra. Jordane (Agenda)
               </h2>
               <p className="text-sm text-on-surface-variant">
                 Versão 2.0 • Acesso direto, tela cheia nativa, carregamento instantâneo e atalhos rápidos.

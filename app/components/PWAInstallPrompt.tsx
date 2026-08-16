@@ -103,10 +103,10 @@ export default function PWAInstallPrompt() {
           
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-semibold text-on-surface truncate">
-              Instalar Aplicativo
+              Dra. Jordane (Agenda)
             </h4>
             <p className="text-[11px] text-on-surface-variant line-clamp-1">
-              Acesso rápido e direto da tela de início do seu celular
+              Instale o aplicativo direto na tela de início
             </p>
           </div>
 
@@ -143,12 +143,12 @@ export default function PWAInstallPrompt() {
 
             <img
               src="/icons/icon-192x192.png"
-              alt="Dra. Jordane App"
+              alt="Dra. Jordane (Agenda)"
               className="w-16 h-16 rounded-2xl mx-auto shadow-lg mb-3 object-cover border-2 border-white"
             />
 
             <h3 className="font-serif text-lg font-bold text-primary mb-1">
-              Instalar no iPhone / iPad
+              Instalar Dra. Jordane (Agenda)
             </h3>
             <p className="text-xs text-on-surface-variant mb-5">
               Siga os 2 passos rápidos no Safari para fixar o app na sua tela de início:

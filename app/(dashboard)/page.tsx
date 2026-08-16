@@ -37,7 +37,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="mb-10">
-        <h2 className="font-serif text-3xl text-primary mb-2">Bom dia, {settings?.nomeFantasia || "Dra. Jordane"}</h2>
+        <h2 className="font-serif text-3xl text-primary mb-2">Bom dia, Dra. Jordane</h2>
         <p className="text-base text-on-surface-variant" suppressHydrationWarning>
           Aqui está a visão geral da clínica para hoje, {new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Sao_Paulo' })}.
         </p>

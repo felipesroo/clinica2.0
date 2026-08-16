@@ -24,13 +24,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Dra. Jordane Ferreira Faria - Sistema de Gestão",
+  title: "Dra. Jordane (Agenda)",
   description: "Sistema de gestão e agendamentos para clínica de estética avançada",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Dra. Jordane",
+    title: "Dra. Jordane (Agenda)",
   },
   formatDetection: {
     telephone: false,
@@ -67,7 +67,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Dra. Jordane" />
+        <meta name="apple-mobile-web-app-title" content="Dra. Jordane (Agenda)" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-full flex flex-col">
