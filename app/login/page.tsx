@@ -1,13 +1,13 @@
 "use client";
 
-import { useActionState, useState, useEffect } from 'react';
+import { useActionState, useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { loginUser } from '../actions/authActions';
 import { getSettings } from '../actions/settings';
 
 const DEFAULT_LOGO = "https://lh3.googleusercontent.com/aida-public/AB6AXuBJgqUJmq2CmUG03OfG0psHxEYIuhitDO52_gUwk8F8RZg2NQnbEhYfRLGQ5TidI1PQdXk00Xw7I42dbGfhFFQEO4Lu_WoZOLrCp7W_EXOKVCGjHQURkXvvR3DBTBDmMNMWA8d6IrcaGNCrutj-Skz2IYO8lG4mHVB7QbJOSq9toEYP-ZoPJQP2SX4QDMGSF_Yjnau6N9tAR7Ri2JHMYyGKVZnxkW7YzHBC8m-zSDH28mVq8AKWTzzqFA";
 
-export default function LoginPage() {
+function LoginContent() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
   const searchParams = useSearchParams();
   const urlError = searchParams.get('error');
@@ -154,10 +154,22 @@ export default function LoginPage() {
         {/* System Info Footer */}
         <div className="mt-8 pt-4 border-t border-white/5 text-center">
           <p className="text-[11px] text-[#806E7A]">
-            Aura Aesthetics v2.0 • Sistema Restrito & Seguro
+            Estética Avançada v2.0 • Sistema Restrito & Seguro
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full bg-[#121014] text-[#E8E0E5] flex items-center justify-center p-4">
+        <div className="text-sm font-medium text-[#C8B2BC]">Carregando...</div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
