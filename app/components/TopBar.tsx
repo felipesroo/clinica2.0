@@ -144,7 +144,15 @@ export default function TopBar({ onMenuClick = () => {} }: { onMenuClick?: () =>
       </div>
       
       {/* Action Buttons */}
-      <div className="flex items-center space-x-2 md:space-x-6">
+      <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-4">
+        <Link
+          href="/configuracoes?tab=app"
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 active:scale-95 text-primary rounded-xl text-xs font-semibold transition-all border border-primary/20 shadow-2xs"
+          title="Instalar App no Celular"
+        >
+          <span className="material-symbols-outlined text-[16px]">install_mobile</span>
+          <span>App</span>
+        </Link>
         <button onClick={toggleTheme} className="relative p-2 text-on-surface-variant hover:text-primary transition-all rounded-full hover:bg-surface-container">
           <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
         </button>

@@ -1,0 +1,77 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a6762" />
+      <stop offset="50%" stop-color="#6c5a56" />
+      <stop offset="100%" stop-color="#53433f" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff4cc" />
+      <stop offset="50%" stop-color="#fed65b" />
+      <stop offset="100%" stop-color="#e9c349" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f5ddd7" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7.68" stdDeviation="10.24" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="112.64" fill="url(#bgGrad)" />
+
+  <!-- Outer subtle luxury border -->
+  <rect x="10.24" y="10.24" width="491.52" height="491.52" rx="102.4" fill="none" stroke="url(#goldGrad)" stroke-width="5.12" stroke-opacity="0.4" />
+
+  <!-- Emblem Group -->
+  <g filter="url(#shadow)">
+    <!-- Central Luxury Flower / Esthetic Sparkle Motif -->
+    <circle cx="256" cy="215.04" r="92.16" fill="none" stroke="url(#goldGrad)" stroke-width="9.216" stroke-dasharray="15.36 7.68"/>
+    
+    <!-- Monogram JF / Dra. Jordane -->
+    <text 
+      x="256" 
+      y="245.76" 
+      font-family="Playfair Display, Georgia, serif" 
+      font-size="112.64" 
+      font-weight="bold" 
+      fill="url(#accentGrad)" 
+      text-anchor="middle" 
+      dominant-baseline="middle"
+      letter-spacing="-0.02em"
+    >JF</text>
+
+    <!-- Small Golden Star Sparkle on top right of monogram -->
+    <path 
+      d="M 317.44 143.36 Q 317.44 163.84 337.92 163.84 Q 317.44 163.84 317.44 184.32 Q 317.44 163.84 296.96 163.84 Q 317.44 163.84 317.44 143.36 Z" 
+      fill="url(#goldGrad)"
+    />
+
+    <!-- Subtitle Text "DRA. JORDANE" -->
+    <text 
+      x="256" 
+      y="348.16" 
+      font-family="Inter, -apple-system, sans-serif" 
+      font-size="33.28" 
+      font-weight="700" 
+      fill="url(#goldGrad)" 
+      text-anchor="middle" 
+      letter-spacing="0.16em"
+    >DRA. JORDANE</text>
+
+    <!-- Subtitle Category "ESTÉTICA AVANÇADA" -->
+    <text 
+      x="256" 
+      y="394.24" 
+      font-family="Inter, -apple-system, sans-serif" 
+      font-size="20.48" 
+      font-weight="500" 
+      fill="#f5ddd7" 
+      text-anchor="middle" 
+      letter-spacing="0.22em"
+      opacity="0.9"
+    >ESTÉTICA AVANÇADA</text>
+  </g>
+</svg>

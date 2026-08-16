@@ -1,0 +1,76 @@
+import type { MetadataRoute } from 'next';
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: 'Dra. Jordane Faria - Estética Avançada',
+    short_name: 'Dra. Jordane',
+    description: 'Sistema de Gestão e Agendamento Clínico - Dra. Jordane Ferreira Faria',
+    start_url: '/',
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: '#faf9f6',
+    theme_color: '#6c5a56',
+    categories: ['medical', 'business', 'productivity'],
+    icons: [
+      {
+        src: '/icons/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/icons/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/icons/icon-maskable-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
+      {
+        src: '/icons/icon-maskable-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
+      {
+        src: '/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+    shortcuts: [
+      {
+        name: 'Novo Agendamento',
+        short_name: 'Agendar',
+        description: 'Criar um novo agendamento de paciente',
+        url: '/agendamentos?novo=true',
+        icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
+      },
+      {
+        name: 'Agenda de Pacientes',
+        short_name: 'Agenda',
+        description: 'Ver agendamentos e cronograma',
+        url: '/agendamentos',
+        icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
+      },
+      {
+        name: 'Lista de Pacientes',
+        short_name: 'Pacientes',
+        description: 'Ver pacientes cadastrados',
+        url: '/clientes',
+        icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
+      },
+      {
+        name: 'Estoque da Clínica',
+        short_name: 'Estoque',
+        description: 'Ver estoque de produtos e insumos',
+        url: '/estoque',
+        icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
+      },
+    ],
+  };
+}

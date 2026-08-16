@@ -8,6 +8,16 @@ import { useSettings } from "../../contexts/SettingsContext";
 export default function ConfiguracoesPage() {
   const [activeTab, setActiveTab] = useState("procedimentos");
   
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab && ["automacao", "procedimentos", "integracoes", "geral", "app"].includes(tab)) {
+        setActiveTab(tab);
+      }
+    }
+  }, []);
+
   // Automacao state — loaded from DB via settings context
   const [confirmacaoAtiva, setConfirmacaoAtiva] = useState(true);
   const [confirmacaoTexto, setConfirmacaoTexto] = useState("");
@@ -175,6 +185,17 @@ export default function ConfiguracoesPage() {
             }`}
           >
             Geral &amp; Clínica
+          </button>
+          <button
+            onClick={() => setActiveTab("app")}
+            className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all shrink-0 whitespace-nowrap flex items-center gap-1.5 ${
+              activeTab === "app"
+                ? "bg-primary text-on-primary shadow-sm"
+                : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-outline-variant/20"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">install_mobile</span>
+            <span>Aplicativo (PWA)</span>
           </button>
         </div>
 
@@ -887,6 +908,137 @@ export default function ConfiguracoesPage() {
         </div>
       </div>
       )}
+
+      {activeTab === "app" && (
+        <div className="space-y-6">
+          {/* Header */}
+          <div>
+            <h1 className="font-serif text-2xl md:text-3xl text-primary mb-2">Aplicativo Móvel da Clínica (PWA)</h1>
+            <p className="text-base text-on-surface-variant max-w-2xl">
+              Instale o sistema diretamente na tela de início do seu celular (iPhone ou Android) para abrir em tela cheia como um aplicativo nativo.
+            </p>
+          </div>
+
+          {/* App Card Banner */}
+          <div className="bg-surface-container-lowest/80 backdrop-blur-sm border border-primary/20 shadow-md rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
+            <img
+              src="/icons/icon-192x192.png"
+              alt="Ícone do App"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shadow-xl object-cover border-2 border-white/60"
+            />
+
+            <div className="flex-1 text-center sm:text-left space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary/15 text-tertiary text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                PWA Habilitado &amp; Pronto para Instalação
+              </div>
+              <h2 className="font-serif text-2xl text-primary font-bold">
+                {settings?.nomeFantasia || "Dra. Jordane Ferreira Faria"}
+              </h2>
+              <p className="text-sm text-on-surface-variant">
+                Versão 2.0 • Acesso direto, tela cheia nativa, carregamento instantâneo e atalhos rápidos.
+              </p>
+            </div>
+          </div>
+
+          {/* Guides Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* iOS Guide */}
+            <div className="bg-surface-container-lowest/60 backdrop-blur-sm border border-outline-variant/30 shadow-sm rounded-2xl p-6 space-y-4">
+              <div className="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                  <span className="material-symbols-outlined text-2xl">phone_iphone</span>
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg font-semibold text-primary">Como instalar no iPhone / iPad</h3>
+                  <p className="text-xs text-on-surface-variant">Navegador Safari</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Abra o link <strong className="text-primary font-mono">agenda.drajordanefaria.com</strong> no navegador <strong>Safari</strong> do seu iPhone.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Toque no botão de <strong>Compartilhar</strong> (ícone do quadrado com seta para cima <span className="material-symbols-outlined inline-block align-middle text-[16px] text-primary">ios_share</span>) na barra inferior do Safari.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Role para baixo na lista e toque em <strong className="text-primary">"Adicionar à Tela de Início"</strong> (<span className="material-symbols-outlined inline-block align-middle text-[16px]">add_box</span>), depois confirme em <strong>Adicionar</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Android Guide */}
+            <div className="bg-surface-container-lowest/60 backdrop-blur-sm border border-outline-variant/30 shadow-sm rounded-2xl p-6 space-y-4">
+              <div className="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center font-bold">
+                  <span className="material-symbols-outlined text-2xl">phone_android</span>
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg font-semibold text-primary">Como instalar no Android</h3>
+                  <p className="text-xs text-on-surface-variant">Google Chrome / Samsung Internet</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Acesse o sistema no <strong>Google Chrome</strong> do seu smartphone.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Ao abrir a página, surgirá o banner inferior <strong className="text-primary">"Instalar Aplicativo"</strong>.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-surface-container/40 rounded-xl border border-outline-variant/20">
+                  <span className="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
+                  <p className="text-xs text-on-surface leading-relaxed">
+                    Ou toque no menu de <strong>3 pontinhos (⋮)</strong> no canto superior direito do Chrome e selecione <strong className="text-primary">"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Features / Advantages */}
+          <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
+            <h3 className="font-serif text-base sm:text-lg font-semibold text-primary mb-3">
+              Vantagens do Aplicativo no Celular:
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-on-surface">
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-primary text-xl">fullscreen</span>
+                <span><strong>Tela Cheia:</strong> Sem barras do navegador para máximo aproveitamento visual.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-primary text-xl">bolt</span>
+                <span><strong>Super Rápido:</strong> Cache inteligente para carregamento instantâneo.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-primary text-xl">touch_app</span>
+                <span><strong>1 Toque:</strong> Ícone exclusivo na tela inicial do seu celular.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
