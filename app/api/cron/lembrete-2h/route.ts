@@ -22,7 +22,8 @@ export async function GET(request: Request) {
   const spNowStr = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
   const spNow = new Date(spNowStr);
   const currentMinutes = spNow.getHours() * 60 + spNow.getMinutes();
-  const todayStr = spNow.toISOString().split('T')[0];
+  // IMPORTANT: Use toLocaleDateString with en-CA for correct Brazil date (not UTC)
+  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
 
   // Get today's appointments
   const agendamentos = await prisma.agendamento.findMany({
