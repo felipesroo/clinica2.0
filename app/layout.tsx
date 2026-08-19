@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
+import PushNotificationManager from "./components/PushNotificationManager";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -74,6 +75,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
           <PWAInstallPrompt />
+          <PushNotificationManager />
         </ThemeProvider>
       </body>
     </html>

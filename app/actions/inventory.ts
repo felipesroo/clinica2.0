@@ -69,6 +69,16 @@ export async function ajustarEstoque(id: string, variacao: number, tipo: "ENTRAD
       }
     });
 
+    if (novaQuantidade <= 3) {
+      const { sendPushNotification } = await import('../../lib/push');
+      sendPushNotification({
+        title: '⚠️ Alerta de Estoque Baixo',
+        body: `O produto "${prod.nome}" atingiu nível crítico (${Math.max(0, novaQuantidade)} ${prod.unidade}).`,
+        url: '/estoque',
+        tag: `estoque-${prod.id}`,
+      }).catch(console.error);
+    }
+
     return { success: true };
   });
 }
@@ -101,6 +111,16 @@ export async function registrarBaixaAgendamento(agendamentoId: string, itens: { 
           agendamentoId
         }
       });
+
+      if (novaQuantidade <= 3) {
+        const { sendPushNotification } = await import('../../lib/push');
+        sendPushNotification({
+          title: '⚠️ Alerta de Estoque Baixo',
+          body: `O produto "${prod.nome}" atingiu nível crítico (${Math.max(0, novaQuantidade)} ${prod.unidade}).`,
+          url: '/estoque',
+          tag: `estoque-${prod.id}`,
+        }).catch(console.error);
+      }
     }
     return { success: true };
   });

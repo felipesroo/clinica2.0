@@ -1,98 +1,55 @@
-const CACHE_NAME = 'clinica-pwa-v1';
-
-const PRECACHE_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/favicon.svg',
-  '/apple-touch-icon.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/icons/icon-maskable-192x192.png',
-  '/icons/icon-maskable-512x512.png'
-];
+// Service Worker para PWA e Notificações Push - Dra. Jordane (Agenda)
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
-    }).then(() => self.skipWaiting())
-  );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    }).then(() => self.clients.claim())
-  );
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
 
-  // Skip non-GET requests, Chrome extensions, and API/Auth routes
-  if (
-    event.request.method !== 'GET' ||
-    url.protocol.startsWith('chrome-extension') ||
-    url.pathname.startsWith('/api/') ||
-    url.pathname.includes('/auth/')
-  ) {
-    return;
+  try {
+    const data = event.data.json();
+    const title = data.title || 'Dra. Jordane (Agenda)';
+    const options = {
+      body: data.body || 'Nova notificação da clínica.',
+      icon: data.icon || '/logo.png',
+      badge: data.badge || '/icons/icon-192x192.png',
+      vibrate: [100, 50, 100],
+      tag: data.tag || 'clinica-notificacao',
+      renotify: true,
+      data: {
+        url: data.url || '/agendamentos',
+      },
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+  } catch (err) {
+    console.error('Error handling push event:', err);
   }
+});
 
-  // Static Assets (Icons, Images, Fonts, Stylesheets): Cache-First with Network Revalidation
-  if (
-    url.pathname.startsWith('/icons/') ||
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.woff2') ||
-    url.hostname.includes('fonts.gstatic.com') ||
-    url.hostname.includes('fonts.googleapis.com')
-  ) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          fetch(event.request).then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
-            }
-          }).catch(() => {});
-          return cachedResponse;
-        }
-        return fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-          }
-          return networkResponse;
-        });
-      })
-    );
-    return;
-  }
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
 
-  // Navigation and other pages: Network-First with Cache Fallback
-  event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+  const targetUrl = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      // Check if there is already a window open with this app
+      for (const client of windowClients) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          client.navigate(targetUrl);
+          return client.focus();
         }
-        return networkResponse;
-      })
-      .catch(() => {
-        return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) return cachedResponse;
-          if (event.request.mode === 'navigate') {
-            return caches.match('/');
-          }
-          return null;
-        });
-      })
+      }
+      // If no window is open, open a new one
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
+    })
   );
 });

@@ -71,6 +71,15 @@ export async function GET(request: Request) {
     } else {
       errors.push(`${ag.cliente?.nome || 'Paciente'}: ${result.error}`);
     }
+
+    // Disparar notificação na barra do celular da Dra. Jordane
+    const { sendPushNotification } = await import('../../../../lib/push');
+    sendPushNotification({
+      title: `⏰ Próximo Atendimento às ${ag.startTime}`,
+      body: `${ag.cliente?.nome || 'Paciente'} - ${ag.service}`,
+      url: '/agendamentos',
+      tag: `atendimento-${ag.id}`,
+    }).catch(console.error);
   }
 
   return NextResponse.json({

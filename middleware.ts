@@ -12,7 +12,8 @@ const PUBLIC_PATHS = [
   '/api/seed',
   '/api/admin',
   '/api/webhooks',
-  '/api/cron'
+  '/api/cron',
+  '/api/push'
 ];
 
 function getPublicBaseUrl(request: NextRequest): string {

@@ -77,6 +77,15 @@ export async function GET(request: Request) {
   // Disparar via WAHA para o número pessoal
   const resultado = await sendWhatsAppMessage(targetPhone, mensagem);
 
+  // Disparar Notificação Push no Celular da Dra. Jordane
+  const { sendPushNotification } = await import('../../../../lib/push');
+  sendPushNotification({
+    title: `📋 Agenda de Hoje (${dataFormatada})`,
+    body: `Dra. Jordane, você tem ${agendamentos.length} atendimento(s) agendado(s) para hoje.`,
+    url: '/agendamentos',
+    tag: `agenda-pessoal-${todayStr}`,
+  }).catch((err) => console.error('[Push] Failed to send daily agenda push:', err));
+
   if (resultado.success) {
     // Registrar que a agenda de hoje foi enviada com sucesso
     await prisma.configuracao.update({
@@ -85,7 +94,7 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({
-      message: `Agenda do dia enviada com sucesso para Dra. Jordane (${targetPhone}).`,
+      message: `Agenda do dia enviada com sucesso para Dra. Jordane (${targetPhone}) e para a barra de notificações do celular.`,
       data: dataFormatada,
       total: agendamentos.length,
       sent: true,
