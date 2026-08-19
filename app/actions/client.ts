@@ -19,7 +19,11 @@ export async function getClientById(id: string): Promise<ClientProfile | null> {
   const client = await prisma.cliente.findUnique({
     where: { id }
   });
-  return client;
+  if (!client) return null;
+  return {
+    ...client,
+    dataCadastro: (client.dataCadastro as Date)?.toISOString?.() ?? null,
+  };
 }
 
 export async function updateClientAction(id: string, data: Partial<ClientProfile>) {

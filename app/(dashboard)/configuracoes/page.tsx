@@ -26,6 +26,9 @@ export default function ConfiguracoesPage() {
   const [horaLembrete, setHoraLembrete] = useState("08:00");
   const [lembrete2hAtivo, setLembrete2hAtivo] = useState(true);
   const [lembrete2hTexto, setLembrete2hTexto] = useState("");
+  const [agendaPessoalAtiva, setAgendaPessoalAtiva] = useState(true);
+  const [telefonePessoalDoutora, setTelefonePessoalDoutora] = useState("62991346756");
+  const [triggeringAgendaPessoal, setTriggeringAgendaPessoal] = useState(false);
   const [automacaoSaving, setAutomacaoSaving] = useState(false);
   const [automacaoSaved, setAutomacaoSaved] = useState(false);
   const [lembreteLog, setLembreteLog] = useState<string | null>(null);
@@ -89,6 +92,8 @@ export default function ConfiguracoesPage() {
       setHoraLembrete(settings.msgHoraLembrete);
       setLembrete2hAtivo(settings.msgLembrete2hAtiva);
       setLembrete2hTexto(settings.msgLembrete2hTexto);
+      setAgendaPessoalAtiva(settings.agendaPessoalAtiva ?? true);
+      setTelefonePessoalDoutora(settings.telefonePessoalDoutora || "62991346756");
       setOpenAiApiKey(settings.openAiApiKey || "");
       setOpenAiSystemPrompt(settings.openAiSystemPrompt || "");
       setAiAgentActive(settings.aiAgentActive || false);
@@ -643,6 +648,87 @@ export default function ConfiguracoesPage() {
             </div>
           </div>
 
+          {/* Agenda Pessoal da Dra. Jordane (Diário 08:00) */}
+          <div className={`p-6 rounded-2xl border transition-all ${
+            agendaPessoalAtiva ? 'border-primary/30 bg-surface-container-lowest/80' : 'border-outline-variant/20 bg-surface-container-lowest/40 opacity-60'
+          }`}>
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  agendaPessoalAtiva ? 'bg-primary/15 text-primary' : 'bg-surface-container-high text-on-surface-variant'
+                }`}>
+                  <span className="material-symbols-outlined text-[20px]">person_check</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-on-surface text-base">Agenda Diária no WhatsApp da Dra. Jordane (08:00)</h3>
+                  <p className="text-xs text-on-surface-variant">
+                    Envia todos os dias às 08:00 o resumo dos pacientes, procedimentos e horários do dia no seu WhatsApp pessoal.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                onClick={() => setAgendaPessoalAtiva(!agendaPessoalAtiva)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  agendaPessoalAtiva ? 'bg-primary' : 'bg-surface-container-high'
+                }`}
+                aria-checked={agendaPessoalAtiva}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+                    agendaPessoalAtiva ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 mb-4">
+              <div>
+                <label className="block text-xs font-medium text-on-surface-variant mb-1">
+                  Seu WhatsApp Pessoal (com DDD):
+                </label>
+                <input
+                  type="text"
+                  value={telefonePessoalDoutora}
+                  onChange={e => setTelefonePessoalDoutora(e.target.value)}
+                  disabled={!agendaPessoalAtiva}
+                  placeholder="Ex: 62991346756"
+                  className="w-full px-4 py-2 text-sm rounded-xl border border-outline-variant/30 bg-surface-container/30 focus:border-primary focus:ring-1 focus:ring-primary text-on-surface font-mono disabled:opacity-50"
+                />
+                <p className="text-[11px] text-on-surface-variant/70 mt-1">
+                  A mensagem só será enviada se houver agendamentos cadastrados para o dia.
+                </p>
+              </div>
+
+              <div className="flex items-end justify-end">
+                <button
+                  type="button"
+                  disabled={!agendaPessoalAtiva || triggeringAgendaPessoal}
+                  onClick={async () => {
+                    setTriggeringAgendaPessoal(true);
+                    try {
+                      const res = await fetch('/api/cron/agenda-pessoal?secret=aura_cron_sec_7a8b9c2d1e0f3456789a_dra_jordane');
+                      const data = await res.json();
+                      if (data.sent) {
+                        setLembreteLog(`✅ Agenda enviada com sucesso para ${telefonePessoalDoutora}! (${data.total} atendimentos hoje)`);
+                      } else {
+                        setLembreteLog(`ℹ️ ${data.message || 'Nenhum agendamento para hoje.'}`);
+                      }
+                    } catch {
+                      setLembreteLog('❌ Erro ao disparar agenda pessoal.');
+                    }
+                    setTriggeringAgendaPessoal(false);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 text-sm font-medium hover:bg-primary/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <span className="material-symbols-outlined text-sm">{triggeringAgendaPessoal ? 'hourglass_empty' : 'send_to_mobile'}</span>
+                  {triggeringAgendaPessoal ? 'Enviando...' : 'Testar Envio da Agenda'}
+                </button>
+              </div>
+            </div>
+          </div>
+
           {/* Save button */}
           <div className="flex flex-col sm:flex-row items-center justify-end gap-4 pt-2">
             {automacaoSaved && (
@@ -664,6 +750,8 @@ export default function ConfiguracoesPage() {
                   msgHoraLembrete: horaLembrete,
                   msgLembrete2hAtiva: lembrete2hAtivo,
                   msgLembrete2hTexto: lembrete2hTexto,
+                  agendaPessoalAtiva: agendaPessoalAtiva,
+                  telefonePessoalDoutora: telefonePessoalDoutora,
                 });
                 setAutomacaoSaving(false);
                 setAutomacaoSaved(true);

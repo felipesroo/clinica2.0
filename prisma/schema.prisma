@@ -70,6 +70,11 @@ model Configuracao {
   openAiSystemPrompt  String? @default("Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.")
   aiAgentActive       Boolean @default(false)
   aiAutoSchedule      Boolean @default(false)
+
+  // Lembrete pessoal da doutora (agenda do dia)
+  telefonePessoalDoutora  String?  @default("62991346756")
+  agendaPessoalAtiva      Boolean  @default(true)
+  agendaPessoalHora       String   @default("08:00")
 }
 
 model Procedimento {

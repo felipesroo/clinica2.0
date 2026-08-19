@@ -29,6 +29,9 @@ export interface ClinicSettings {
   openAiSystemPrompt?: string | null;
   aiAgentActive?: boolean;
   aiAutoSchedule?: boolean;
+  telefonePessoalDoutora?: string | null;
+  agendaPessoalAtiva?: boolean;
+  agendaPessoalHora?: string;
 }
 
 export async function getSettings(): Promise<ClinicSettings> {
@@ -44,6 +47,9 @@ export async function getSettings(): Promise<ClinicSettings> {
         razaoSocial: "Dra. Jordane Ferreira Faria Estética Avançada",
         wahaUrl: "http://2.25.152.195:3005",
         wahaSessionName: "default",
+        telefonePessoalDoutora: "62991346756",
+        agendaPessoalAtiva: true,
+        agendaPessoalHora: "08:00",
       }
     });
   }
@@ -76,6 +82,9 @@ export async function getSettings(): Promise<ClinicSettings> {
     openAiSystemPrompt: settings.openAiSystemPrompt,
     aiAgentActive: settings.aiAgentActive,
     aiAutoSchedule: settings.aiAutoSchedule,
+    telefonePessoalDoutora: settings.telefonePessoalDoutora ?? "62991346756",
+    agendaPessoalAtiva: settings.agendaPessoalAtiva ?? true,
+    agendaPessoalHora: settings.agendaPessoalHora ?? "08:00",
   };
 }
 

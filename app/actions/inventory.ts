@@ -11,9 +11,19 @@ export interface EstoqueProdutoData {
 }
 
 export async function getEstoque() {
-  return await prisma.estoqueProduto.findMany({
+  const items = await prisma.estoqueProduto.findMany({
     orderBy: { nome: 'asc' }
   });
+  return items.map((p: any) => ({
+    id: p.id,
+    nome: p.nome,
+    categoria: p.categoria,
+    quantidade: p.quantidade,
+    unidade: p.unidade,
+    status: p.status,
+    criadoEm: p.criadoEm?.toISOString() ?? null,
+    atualizadoEm: p.atualizadoEm?.toISOString() ?? null,
+  }));
 }
 
 export async function createEstoqueProduto(data: Omit<EstoqueProdutoData, 'id' | 'status'>) {
