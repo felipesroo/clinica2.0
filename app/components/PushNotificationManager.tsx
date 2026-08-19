@@ -63,12 +63,14 @@ export default function PushNotificationManager() {
         applicationServerKey: convertedVapidKey,
       });
 
+      const subJson = subscription.toJSON ? subscription.toJSON() : subscription;
+
       // 3. Save subscription to server database
       const response = await fetch('/api/push/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subscription,
+          subscription: subJson,
           userAgent: navigator.userAgent,
         }),
       });
@@ -79,7 +81,8 @@ export default function PushNotificationManager() {
         await fetch('/api/push/subscribe');
         alert('✅ Notificações ativadas com sucesso! Você receberá alertas na barra do seu celular.');
       } else {
-        alert('Erro ao registrar dispositivo no servidor.');
+        const errData = await response.json().catch(() => ({}));
+        alert(`Erro ao registrar dispositivo no servidor: ${errData.error || response.statusText}`);
       }
     } catch (error: any) {
       console.error('[Push] Subscription error:', error);

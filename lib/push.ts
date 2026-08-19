@@ -25,12 +25,31 @@ export interface PushNotificationPayload {
   tag?: string;
 }
 
+async function ensurePushTableExists() {
+  try {
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "PushSubscription" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "endpoint" TEXT NOT NULL UNIQUE,
+        "p256dh" TEXT NOT NULL,
+        "auth" TEXT NOT NULL,
+        "userAgent" TEXT,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+  } catch (err) {
+    console.error('[Push] ensurePushTableExists error:', err);
+  }
+}
+
 /**
  * Dispatches a push notification to all subscribed mobile devices / browsers.
  * Automatically removes invalid or expired subscriptions.
  */
 export async function sendPushNotification(payload: PushNotificationPayload) {
   try {
+    await ensurePushTableExists();
     const subscriptions = await prisma.pushSubscription.findMany();
     if (subscriptions.length === 0) {
       console.log('[Push] No active push subscriptions found.');

@@ -7,12 +7,44 @@ import { syncEventToGoogle, deleteEventFromGoogle, fetchExternalGoogleEvents } f
 import { sendWhatsAppMessage } from '../../lib/whatsapp';
 import { reverterBaixaAgendamento } from './inventory';
 
+let schemaEnsured = false;
+async function ensureSchemaColumnsExist() {
+  if (schemaEnsured) return;
+  try {
+    const ddl = [
+      `ALTER TABLE "Configuracao" ADD COLUMN IF NOT EXISTS "telefonePessoalDoutora" TEXT DEFAULT '62991346756';`,
+      `ALTER TABLE "Configuracao" ADD COLUMN IF NOT EXISTS "agendaPessoalAtiva" BOOLEAN DEFAULT true;`,
+      `ALTER TABLE "Configuracao" ADD COLUMN IF NOT EXISTS "agendaPessoalHora" TEXT DEFAULT '08:00';`,
+      `ALTER TABLE "Configuracao" ADD COLUMN IF NOT EXISTS "agendaPessoalUltimoEnvio" TEXT;`,
+      `ALTER TABLE "Agendamento" ADD COLUMN IF NOT EXISTS "confirmacaoEnviada" BOOLEAN DEFAULT false;`,
+      `ALTER TABLE "Agendamento" ADD COLUMN IF NOT EXISTS "lembreteVesperaEnviado" BOOLEAN DEFAULT false;`,
+      `ALTER TABLE "Agendamento" ADD COLUMN IF NOT EXISTS "lembrete2hEnviado" BOOLEAN DEFAULT false;`,
+      `CREATE TABLE IF NOT EXISTS "PushSubscription" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "endpoint" TEXT NOT NULL UNIQUE,
+          "p256dh" TEXT NOT NULL,
+          "auth" TEXT NOT NULL,
+          "userAgent" TEXT,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );`
+    ];
+    for (const sql of ddl) {
+      await prisma.$executeRawUnsafe(sql);
+    }
+    schemaEnsured = true;
+  } catch (err) {
+    console.error('[Schema] ensureSchemaColumnsExist in clinic.ts error:', err);
+  }
+}
+
 export async function syncGoogleCalendarAction() {
   return await getAppointments();
 }
 
 export async function getAppointments() {
   try {
+    await ensureSchemaColumnsExist();
     const agendamentos = await prisma.agendamento.findMany({
       include: {
         cliente: true,
