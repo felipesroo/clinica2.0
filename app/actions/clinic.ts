@@ -226,8 +226,14 @@ export async function createAppointment(data: {
           .replace(/{hora}/g, data.startTime);
         
         console.log(`[WAHA] createAppointment: Sending message to ${cliente.telefone}: ${message}`);
-        sendWhatsAppMessage(cliente.telefone, message).then((res) => {
+        sendWhatsAppMessage(cliente.telefone, message).then(async (res) => {
            console.log(`[WAHA] createAppointment: sendWhatsAppMessage result:`, res);
+           if (res.success) {
+             await prisma.agendamento.update({
+               where: { id: agendamento.id },
+               data: { confirmacaoEnviada: true }
+             });
+           }
         }).catch(console.error);
       }
     } catch (err) {

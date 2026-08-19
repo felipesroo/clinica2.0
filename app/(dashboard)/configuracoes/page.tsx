@@ -708,7 +708,7 @@ export default function ConfiguracoesPage() {
                   onClick={async () => {
                     setTriggeringAgendaPessoal(true);
                     try {
-                      const res = await fetch('/api/cron/agenda-pessoal?secret=aura_cron_sec_7a8b9c2d1e0f3456789a_dra_jordane');
+                      const res = await fetch('/api/cron/agenda-pessoal?secret=aura_cron_sec_7a8b9c2d1e0f3456789a_dra_jordane&force=true');
                       const data = await res.json();
                       if (data.sent) {
                         setLembreteLog(`✅ Agenda enviada com sucesso para ${telefonePessoalDoutora}! (${data.total} atendimentos hoje)`);

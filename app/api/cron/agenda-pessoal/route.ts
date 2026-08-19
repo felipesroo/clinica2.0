@@ -4,11 +4,13 @@ import { sendWhatsAppMessage } from '../../../../lib/whatsapp';
 
 // GET /api/cron/agenda-pessoal
 // Dispara todos os dias às 08:00 o resumo completo dos atendimentos do dia para o WhatsApp pessoal da Dra. Jordane (62991346756)
-// Apenas envia caso existam agendamentos para o dia.
+// Apenas envia caso existam agendamentos para o dia e nunca envia duplicado.
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
+  const force = searchParams.get('force') === 'true';
   const expectedSecret = process.env.CRON_SECRET || 'aura-cron-secret-2026';
+  
   if (secret !== expectedSecret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -20,10 +22,20 @@ export async function GET(request: Request) {
 
   const targetPhone = config.telefonePessoalDoutora || '62991346756';
 
-  // Obter data atual no fuso horário oficial de Brasília
+  // Obter data atual no fuso horário oficial de Brasília (America/Sao_Paulo)
   const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
   const [ano, mes, dia] = todayStr.split('-');
   const dataFormatada = `${dia}/${mes}/${ano}`;
+
+  // Controle anti-duplicidade diário: não envia mais de uma vez no mesmo dia a menos que force=true (ex: teste manual)
+  if (!force && config.agendaPessoalUltimoEnvio === todayStr) {
+    return NextResponse.json({
+      message: `A agenda de hoje (${dataFormatada}) já foi enviada anteriormente para o WhatsApp da Dra. Jordane.`,
+      data: dataFormatada,
+      sent: false,
+      alreadySentToday: true,
+    });
+  }
 
   // Buscar todos os agendamentos do dia
   const agendamentos = await prisma.agendamento.findMany({
@@ -31,7 +43,7 @@ export async function GET(request: Request) {
     include: { cliente: true },
   });
 
-  // Caso NÃO tenha agendamentos no dia, não incomoda com mensagem
+  // Caso NÃO tenha agendamentos no dia, não envia mensagem
   if (agendamentos.length === 0) {
     return NextResponse.json({
       message: `Nenhum agendamento para hoje (${dataFormatada}). Nenhuma mensagem disparada.`,
@@ -66,6 +78,12 @@ export async function GET(request: Request) {
   const resultado = await sendWhatsAppMessage(targetPhone, mensagem);
 
   if (resultado.success) {
+    // Registrar que a agenda de hoje foi enviada com sucesso
+    await prisma.configuracao.update({
+      where: { id: '1' },
+      data: { agendaPessoalUltimoEnvio: todayStr }
+    });
+
     return NextResponse.json({
       message: `Agenda do dia enviada com sucesso para Dra. Jordane (${targetPhone}).`,
       data: dataFormatada,

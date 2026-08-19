@@ -24,57 +24,63 @@ model Cliente {
 }
 
 model Agendamento {
-  id                   String                @id @default(uuid())
-  date                 String
-  startTime            String
-  duration             Int                   @default(60)
-  service              String
-  status               String                @default("AGENDADO")
-  googleEventId        String?
-  valor                String?
-  formaPagamento       String?
-  numeroParcelas       Int?
-  clienteId            String
-  cliente              Cliente               @relation(fields: [clienteId], references: [id], onDelete: Cascade)
-  movimentacoesEstoque EstoqueMovimentacao[]
+  id                      String                @id @default(uuid())
+  date                    String
+  startTime               String
+  duration                Int                   @default(60)
+  service                 String
+  status                  String                @default("AGENDADO")
+  googleEventId           String?
+  valor                   String?
+  formaPagamento          String?
+  numeroParcelas          Int?
+  clienteId               String
+  cliente                 Cliente               @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  movimentacoesEstoque    EstoqueMovimentacao[]
+  
+  // Controle anti-duplicidade de notificações
+  confirmacaoEnviada      Boolean               @default(false)
+  lembreteVesperaEnviado  Boolean               @default(false)
+  lembrete2hEnviado       Boolean               @default(false)
 }
 
 model Configuracao {
-  id                  String  @id @default("1")
-  nomeFantasia        String  @default("Estética Avançada")
-  razaoSocial         String  @default("")
-  cnpj                String  @default("")
-  inscricaoMun        String  @default("")
-  email               String  @default("contato@drajordanefaria.com")
-  whatsapp            String  @default("(11) 99999-9999")
-  cep                 String  @default("01415-000")
-  endereco            String  @default("Rua Oscar Freire, 1000")
-  logoUrl             String  @default("/logo.png")
-  bairro              String  @default("Jardins")
-  cidade              String  @default("São Paulo")
-  estado              String  @default("SP")
-  instagram           String  @default("instagram.com/drajordanefaria")
-  googleRefreshToken  String?
-  googleCalendarId    String?
-  wahaUrl             String?
-  wahaSessionName     String?
-  msgConfirmacaoAtiva Boolean @default(true)
-  msgConfirmacaoTexto String  @default("Olá, {nome}! 🌸 Seu agendamento de *{servico}* foi confirmado para o dia *{data}* às *{hora}*. Te esperamos na Estética Avançada! Qualquer dúvida, é só chamar.")
-  msgLembreteAtiva    Boolean @default(true)
-  msgLembreteTexto    String  @default("Oi, {nome}! 😊 Passando para lembrar que amanhã você tem horário de *{servico}* às *{hora}* aqui na Estética Avançada. Até lá! 💜")
-  msgHoraLembrete     String  @default("08:00")
-  msgLembrete2hAtiva  Boolean @default(true)
-  msgLembrete2hTexto  String  @default("Oi, {nome}! ⏰ Lembrete: em 2 horas você tem *{servico}* às *{hora}* na Estética Avançada. Te esperamos! 💜")
+  id                      String  @id @default("1")
+  nomeFantasia            String  @default("Estética Avançada")
+  razaoSocial             String  @default("")
+  cnpj                    String  @default("")
+  inscricaoMun            String  @default("")
+  email                   String  @default("contato@drajordanefaria.com")
+  whatsapp                String  @default("(11) 99999-9999")
+  cep                     String  @default("01415-000")
+  endereco                String  @default("Rua Oscar Freire, 1000")
+  logoUrl                 String  @default("/logo.png")
+  bairro                  String  @default("Jardins")
+  cidade                  String  @default("São Paulo")
+  estado                  String  @default("SP")
+  instagram               String  @default("instagram.com/drajordanefaria")
+  googleRefreshToken      String?
+  googleCalendarId        String?
+  wahaUrl                 String?
+  wahaSessionName         String?
+  msgConfirmacaoAtiva     Boolean @default(true)
+  msgConfirmacaoTexto     String  @default("Olá, {nome}! 🌸 Seu agendamento de *{servico}* foi confirmado para o dia *{data}* às *{hora}*. Te esperamos na Estética Avançada! Qualquer dúvida, é só chamar.")
+  msgLembreteAtiva        Boolean @default(true)
+  msgLembreteTexto        String  @default("Oi, {nome}! 😊 Passando para lembrar que amanhã você tem horário de *{servico}* às *{hora}* aqui na Estética Avançada. Até lá! 💜")
+  msgHoraLembrete         String  @default("08:00")
+  msgLembrete2hAtiva      Boolean @default(true)
+  msgLembrete2hTexto      String  @default("Oi, {nome}! ⏰ Lembrete: em 2 horas você tem *{servico}* às *{hora}* na Estética Avançada. Te esperamos! 💜")
   
-  openAiApiKey        String?
-  openAiSystemPrompt  String? @default("Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.")
-  aiAgentActive       Boolean @default(false)
-  aiAutoSchedule      Boolean @default(false)
+  openAiApiKey            String?
+  openAiSystemPrompt      String? @default("Você é a assistente virtual da Clínica da Dra. Jordane Ferreira Faria. Seja educada, concisa e ajude os pacientes com informações e agendamentos.")
+  aiAgentActive           Boolean @default(false)
+  aiAutoSchedule          Boolean @default(false)
 
   // Lembrete pessoal da doutora (agenda do dia)
   telefonePessoalDoutora  String?  @default("62991346756")
   agendaPessoalAtiva      Boolean  @default(true)
   agendaPessoalHora       String   @default("08:00")
+  agendaPessoalUltimoEnvio String?
 }
 
 model Procedimento {
