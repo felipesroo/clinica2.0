@@ -29,6 +29,9 @@ export default function ConfiguracoesPage() {
   const [agendaPessoalAtiva, setAgendaPessoalAtiva] = useState(true);
   const [telefonePessoalDoutora, setTelefonePessoalDoutora] = useState("62991346756");
   const [triggeringAgendaPessoal, setTriggeringAgendaPessoal] = useState(false);
+  const [pushTesting, setPushTesting] = useState(false);
+  const [pushTestResult, setPushTestResult] = useState<string | null>(null);
+  const [pushPermission, setPushPermission] = useState<string>("default");
   const [automacaoSaving, setAutomacaoSaving] = useState(false);
   const [automacaoSaved, setAutomacaoSaved] = useState(false);
   const [lembreteLog, setLembreteLog] = useState<string | null>(null);
@@ -1026,6 +1029,69 @@ export default function ConfiguracoesPage() {
               <p className="text-sm text-on-surface-variant">
                 Versão 2.0 • Acesso direto, tela cheia nativa, carregamento instantâneo e atalhos rápidos.
               </p>
+            </div>
+          </div>
+
+          {/* Push Notifications Card */}
+          <div className="bg-surface-container-lowest/80 backdrop-blur-sm border border-primary/25 shadow-md rounded-3xl p-6 sm:p-8 space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-outline-variant/20 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-primary/15 text-primary flex items-center justify-center">
+                  <span className="material-symbols-outlined text-2xl">notifications_active</span>
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg font-bold text-primary">Notificações na Barra do Celular (Push)</h3>
+                  <p className="text-xs text-on-surface-variant">
+                    Receba lembretes 2h antes de cada consulta e o resumo da agenda diária às 08h na barra do seu celular.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={pushTesting}
+                  onClick={async () => {
+                    setPushTesting(true);
+                    setPushTestResult(null);
+                    try {
+                      const res = await fetch('/api/push/subscribe');
+                      const data = await res.json();
+                      if (data.success) {
+                        setPushTestResult(`✅ Notificação disparada com sucesso para ${data.count} dispositivo(s) conectado(s)! Verifique a barra superior do seu celular.`);
+                      } else {
+                        setPushTestResult(`❌ Erro: ${data.error || 'Nenhum dispositivo cadastrado.'}`);
+                      }
+                    } catch (e: any) {
+                      setPushTestResult(`❌ Erro ao enviar: ${e.message}`);
+                    }
+                    setPushTesting(false);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-primary text-on-primary font-medium text-xs hover:bg-primary/90 transition-all shadow-sm flex items-center gap-2 disabled:opacity-60"
+                >
+                  <span className="material-symbols-outlined text-[18px]">{pushTesting ? 'hourglass_empty' : 'send_to_mobile'}</span>
+                  {pushTesting ? 'Disparando...' : 'Enviar Alerta de Teste Agora'}
+                </button>
+              </div>
+            </div>
+
+            {pushTestResult && (
+              <div className={`p-4 rounded-xl text-xs font-medium border ${
+                pushTestResult.startsWith('✅') ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-red-500/10 border-red-500/20 text-red-500'
+              }`}>
+                {pushTestResult}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-on-surface-variant pt-2">
+              <div className="p-3.5 bg-surface-container/30 rounded-xl border border-outline-variant/15">
+                <strong className="text-primary block mb-1">📱 No iPhone (iOS):</strong>
+                É obrigatório abrir o sistema através do <strong>ícone adicionado à Tela de Início</strong> (modo aplicativo). Se aberto pelo Safari normal, a Apple bloqueia as notificações. Em <em>Ajustes &gt; Notificações &gt; Dra. Jordane</em>, certifique-se de que estão permitidas.
+              </div>
+              <div className="p-3.5 bg-surface-container/30 rounded-xl border border-outline-variant/15">
+                <strong className="text-primary block mb-1">🤖 No Android:</strong>
+                As notificações funcionam nativamente. Certifique-se de que as permissões do app não estão silenciadas em <em>Configurações do Celular &gt; Apps &gt; Dra. Jordane (Agenda) &gt; Notificações</em>.
+              </div>
             </div>
           </div>
 
